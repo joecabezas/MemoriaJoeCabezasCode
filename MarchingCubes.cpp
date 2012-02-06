@@ -32,8 +32,16 @@ mpVector LinearInterp(mp4Vector p1, mp4Vector p2, float value)
 //	MARCHING CUBES	//
 
 //  VERSION  1A).  //
-TRIANGLE* MarchingCubes(int ncellsX, int ncellsY, int ncellsZ, float minValue, mp4Vector * points,  
-										INTERSECTION intersection, int &numTriangles)
+TRIANGLE* MarchingCubes(
+	int ncellsX,
+	int ncellsY,
+	int ncellsZ,
+	float minValue,
+	mp4Vector * points,
+	
+	INTERSECTION intersection,
+	int &numTriangles
+)
 {
 	TRIANGLE * triangles = new TRIANGLE[3*ncellsX*ncellsY*ncellsZ];//this should be enough space, if not change 4 to 5
 	numTriangles = int(0);
@@ -47,7 +55,11 @@ TRIANGLE* MarchingCubes(int ncellsX, int ncellsY, int ncellsZ, float minValue, m
 				//initialize vertices
 				mp4Vector verts[8];
 				int ind = i*YtimeZ + j*(ncellsZ+1) + k;
-   /*(step 3)*/ /*
+
+				//(step 3)
+				
+				//VERSION ORIGINAL
+				/*
 				verts[0] = points[ind];
 				verts[1] = points[ind + YtimeZ];
 				verts[2] = points[ind + YtimeZ + 1];
@@ -58,6 +70,7 @@ TRIANGLE* MarchingCubes(int ncellsX, int ncellsY, int ncellsZ, float minValue, m
 				verts[7] = points[ind + (ncellsZ+1) + 1];
 				*/
 				
+				//VERSION JOE PARA VER EL RESULTADO DE UN CUBO
 				verts[0] = points[ind + 0];
 				verts[1] = points[ind + 1];
 				verts[2] = points[ind + 2];
@@ -69,9 +82,13 @@ TRIANGLE* MarchingCubes(int ncellsX, int ncellsY, int ncellsZ, float minValue, m
 				
 				//get the index
 				int cubeIndex = int(0);
-				for(int n=0; n < 8; n++){	
+				for(int n=0; n < 8; n++)
+				{	
 					//std::cout << "(verts[n].val, minValue) = (" << verts[n].val << "," << minValue << ")"; 
-	/*(step 4)*/	if(verts[n].val <= minValue){
+	
+					/*(step 4)*/
+					if(verts[n].val <= minValue)
+					{
 						cubeIndex |= (1 << n);
 						//std::cout << " OK ";
 					}
@@ -81,7 +98,10 @@ TRIANGLE* MarchingCubes(int ncellsX, int ncellsY, int ncellsZ, float minValue, m
 				//std::cout << "cube index: (" << cubeIndex << ")" << std::endl; 
 
 				//check if its completely inside or outside
-	/*(step 5)*/if(!edgeTable[cubeIndex]) continue;
+				
+				/*(step 5)*/
+				if(!edgeTable[cubeIndex])
+					continue;
 			
 				//get intersection vertices on edges and save into the array
 				mpVector intVerts[12];

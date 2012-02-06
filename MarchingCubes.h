@@ -51,13 +51,27 @@ typedef float (*FORMULA)(mpVector);
 //		 following index: i*(ncellsY+1)*(ncellsZ+1) + j*(ncellsZ+1) + k .
 //		Also, the array starts at the minimum on all axes.
 //TODO: another algorithm which takes array of JUST values. Coordinates then start at farthest, lower-right corner.
-TRIANGLE* MarchingCubes(int ncellsX, int ncellsY, int ncellsZ, float minValue, mp4Vector * points,  
-									INTERSECTION intersection, int &numTriangles);
+TRIANGLE* MarchingCubes(
+	int ncellsX,
+	int ncellsY,
+	int ncellsZ, 
+	
+	float minValue,
+	mp4Vector * points,
+	INTERSECTION intersection,
+	int &numTriangles
+);
+
 //  1B).
 //same as above only does linear interpolation so no INTERSECTION function is needed
-TRIANGLE* MarchingCubesLinear(int ncellsX, int ncellsY, int ncellsZ, float minValue, 
-									mp4Vector * points, int &numTriangles);
-
+TRIANGLE* MarchingCubesLinear(
+	int ncellsX,
+	int ncellsY,
+	int ncellsZ,
+	float minValue,
+	mp4Vector* points,
+	int &numTriangles
+);
 
 //	2A).
 //takes dimensions (minx,maxx,miny,...) and the number of cells (ncellsX,...) to subdivide on each axis
@@ -67,13 +81,40 @@ TRIANGLE* MarchingCubesLinear(int ncellsX, int ncellsY, int ncellsZ, float minVa
 //  point of intersection of the surface and the edge between points p1 and p2
 // saves number of triangles in numTriangles and the pointer to them is returned
 // (note: mins' and maxs' are included in the algorithm)
-TRIANGLE* MarchingCubes(float mcMinX, float mcMaxX, float mcMinY, float mcMaxY, float mcMinZ, float mcMaxZ, 
-									int ncellsX, int ncellsY, int ncellsZ, float minValue, 
-									FORMULA formula, INTERSECTION intersection, int &numTriangles);
+TRIANGLE* MarchingCubes(
+	float mcMinX, 
+	float mcMaxX,
+	float mcMinY,
+	float mcMaxY,
+	float mcMinZ,
+	float mcMaxZ, 
+	int ncellsX,
+	int ncellsY,
+	int ncellsZ,
+	float minValue,
+	FORMULA formula,
+	INTERSECTION intersection,
+	int &numTriangle
+);
+
 //	2B).
 //same as above only does linear interpolation to determine intersection of edge and surface
 // INTERSECTION function is no more needed
-TRIANGLE* MarchingCubesLinear(float mcMinX, float mcMaxX, float mcMinY, float mcMaxY, float mcMinZ, float mcMaxZ, 
-									int ncellsX, int ncellsY, int ncellsZ, float minValue, 
-									FORMULA formula, int &numTriangles);
+TRIANGLE* MarchingCubesLinear(
+	float mcMinX,
+	float mcMaxX,
+	float mcMinY,
+	float mcMaxY,
+	float mcMinZ,
+	float mcMaxZ, 
+	
+	int ncellsX,
+	int ncellsY,
+	int ncellsZ,
+	float minValue, 
+	
+	FORMULA formula,
+	int &numTriangles
+);
+
 #endif
