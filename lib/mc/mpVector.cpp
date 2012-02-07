@@ -75,12 +75,14 @@ mpVector mpVector::operator * (float c)
 	return mpVector(x*c, y*c, z*c);
 }
 
-mpVector& mpVector::operator = (const mpVector& other)
-//void mpVector::operator = (const mpVector& other)
+//mpVector& mpVector::operator = (const mpVector& other)
+void mpVector::operator = (const mpVector& other)
 {
 	x = other.x;
 	y = other.y;
 	z = other.z;
+
+	//return *this;
 }
 
 mpVector::operator mp4Vector() const

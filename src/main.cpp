@@ -18,7 +18,7 @@
 //      MA 02110-1301, USA.
 //
 
-#include "MarchingCubes.h"
+#include "../lib/mc/MarchingCubes.h"
 
 #define MINVAL 1
 #define D 1
@@ -33,13 +33,13 @@ int main(int argc, char **argv)
 	mp4Vector vertices[8];
 	
 	vertices[0] = mp4Vector(0,0,0,1);
-	vertices[1] = mp4Vector(1,0,0,1);
-	vertices[2] = mp4Vector(1,1,0,1);
-	vertices[3] = mp4Vector(0,1,0,1);
-	vertices[4] = mp4Vector(0,0,1,1);
+	vertices[1] = mp4Vector(0,0,1,1);
+	vertices[2] = mp4Vector(0,1,0,2);
+	vertices[3] = mp4Vector(0,1,1,2);
+	vertices[4] = mp4Vector(1,0,0,2);
 	vertices[5] = mp4Vector(1,0,1,2);
-	vertices[6] = mp4Vector(1,1,1,2);
-	vertices[7] = mp4Vector(0,1,1,2);
+	vertices[6] = mp4Vector(1,1,0,2);
+	vertices[7] = mp4Vector(1,1,1,2);
 	
 	Triangles = MarchingCubes(
 						/*int ncellsX*/ 1,
@@ -52,14 +52,15 @@ int main(int argc, char **argv)
 						);
 
 	//debug
-	//std::cout << "numero de triangulos: " << numTriangles << std::endl;
+	std::cout << "numero de triangulos: " << numTriangles << std::endl;
 	for(int i=0; i<numTriangles; i++){
-		//std::cout << "triangulo " << i << ":" << std::endl;
+		std::cout << "triangulo " << i << ":" << std::endl;
 		for(int j=0; j<3; j++){
-			//std::cout << "vertice " << j << ": (" << Triangles[i].p[j].x << "," << Triangles[i].p[j].y << "," << Triangles[i].p[j].z << ")" << std::endl;
+			std::cout << "vertice " << j << ": (" << Triangles[i].p[j].x << "," << Triangles[i].p[j].y << "," << Triangles[i].p[j].z << ")" << std::endl;
 		}
 	}
 	
+	/*
 	//escribiendo el OFF
 	std::cout << "OFF" << std::endl;
 	
@@ -149,17 +150,37 @@ int main(int argc, char **argv)
 		std::cout << std::endl;
 		
 	}
-	
+	*/
+
 	return 0;
 }
 
 mpVector Promedio(mp4Vector p1, mp4Vector p2, float value)
 {
 	//debug
-	//std::cout << "p1: (" << p1.x << "," << p1.y << "," << p1.z << "," << p1.val << ")" << std::endl;
-	//std::cout << "p2: (" << p2.x << "," << p2.y << "," << p2.z << "," << p2.val << ")" << std::endl;
-	//std::cout << "value: " << value << std::endl;
+	std::cout << "Promedio" << std::endl;
+
+	std::cout << "p1: (" << p1.x << "," << p1.y << "," << p1.z << "," << p1.val << ")" << std::endl;
+	std::cout << "p2: (" << p2.x << "," << p2.y << "," << p2.z << "," << p2.val << ")" << std::endl;
+	std::cout << "value: " << value << std::endl;
 	
-	//std::cout << "interpolacion: " << ((mpVector)p1 + (mpVector)p2)/2 << std::endl;
+	std::cout << "interpolacion: " << ((mpVector)p1 + (mpVector)p2)/2 << std::endl;
 	return ((mpVector)p1 + (mpVector)p2)/2;
 }
+
+//asi se rellenan los datos
+/*
+void GLCanvas::InitData()
+{
+	delete [] mcPoints;	//first free the previous allocated memory
+	mcPoints = new mp4Vector[(nX+1)*(nY+1)*(nZ+1)];
+	mpVector stepSize((MAXX-MINX)/nX, (MAXY-MINY)/nY, (MAXZ-MINZ)/nZ);
+	for(int i=0; i < nX+1; i++)
+		for(int j=0; j < nY+1; j++)
+			for(int k=0; k < nZ+1; k++) {
+				mp4Vector vert(MINX+i*stepSize.x, MINY+j*stepSize.y, MINZ+k*stepSize.z, 0);
+				vert.val = Potential((mpVector)vert);
+				mcPoints[i*(nY+1)*(nZ+1) + j*(nZ+1) + k] = vert;
+	}
+}
+*/

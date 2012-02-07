@@ -59,7 +59,6 @@ TRIANGLE* MarchingCubes(
 				//(step 3)
 				
 				//VERSION ORIGINAL
-				/*
 				verts[0] = points[ind];
 				verts[1] = points[ind + YtimeZ];
 				verts[2] = points[ind + YtimeZ + 1];
@@ -68,9 +67,9 @@ TRIANGLE* MarchingCubes(
 				verts[5] = points[ind + YtimeZ + (ncellsZ+1)];
 				verts[6] = points[ind + YtimeZ + (ncellsZ+1) + 1];
 				verts[7] = points[ind + (ncellsZ+1) + 1];
-				*/
 				
 				//VERSION JOE PARA VER EL RESULTADO DE UN CUBO
+				/*
 				verts[0] = points[ind + 0];
 				verts[1] = points[ind + 1];
 				verts[2] = points[ind + 2];
@@ -79,6 +78,7 @@ TRIANGLE* MarchingCubes(
 				verts[5] = points[ind + 5];
 				verts[6] = points[ind + 6];
 				verts[7] = points[ind + 7];
+				*/
 				
 				//get the index
 				int cubeIndex = int(0);

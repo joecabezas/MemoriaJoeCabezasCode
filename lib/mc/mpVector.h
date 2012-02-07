@@ -37,8 +37,8 @@ public:
 	mpVector operator / (float c);
 	mpVector operator * (float c);
 	
-	mpVector& operator = (const mpVector& other);
-	//void operator = (const mpVector& other);
+	//mpVector& operator = (const mpVector& other);
+	void operator = (const mpVector& other);
 	
 	operator mp4Vector() const;
 
