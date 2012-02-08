@@ -19,6 +19,7 @@
 //
 
 #include "../lib/mc/MarchingCubes.h"
+#include "../lib/filehandlers/OffFile.h"
 
 #define MINVAL 1
 #define D 1
@@ -60,6 +61,9 @@ int main(int argc, char **argv)
 		}
 	}
 	
+	OffFile* f = new OffFile(Triangles, numTriangles);
+	f->createOff();
+
 	/*
 	//escribiendo el OFF
 	std::cout << "OFF" << std::endl;
