@@ -84,7 +84,7 @@ TRIANGLE* MarchingCubes(
 				int cubeIndex = int(0);
 				for(int n=0; n < 8; n++)
 				{	
-					//std::cout << "(verts[n].val, minValue) = (" << verts[n].val << "," << minValue << ")"; 
+					//std::cout << "(verts[n].val, minValue) = (" << verts[n].val << "," << minValue << ")";
 	
 					/*(step 4)*/
 					if(verts[n].val <= minValue)
@@ -95,7 +95,7 @@ TRIANGLE* MarchingCubes(
 					//std::cout << std::endl;
 				}
 				
-				//std::cout << "cube index: (" << cubeIndex << ")" << std::endl; 
+				//std::cout << "cube index: (" << cubeIndex << ")" << std::endl;
 
 				//check if its completely inside or outside
 				

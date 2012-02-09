@@ -18,6 +18,8 @@
 //      MA 02110-1301, USA.
 //
 
+#include <math.h>
+
 #include "../lib/mc/MarchingCubes.h"
 #include "../lib/filehandlers/OffFile.h"
 
@@ -31,22 +33,41 @@ int main(int argc, char **argv)
 	TRIANGLE * Triangles;
 	int numTriangles;
 	
-	mp4Vector vertices[8];
-	
-	vertices[0] = mp4Vector(0,0,0,1);
-	vertices[1] = mp4Vector(0,0,1,1);
-	vertices[2] = mp4Vector(0,1,0,2);
-	vertices[3] = mp4Vector(0,1,1,2);
-	vertices[4] = mp4Vector(1,0,0,2);
-	vertices[5] = mp4Vector(1,0,1,2);
-	vertices[6] = mp4Vector(1,1,0,2);
-	vertices[7] = mp4Vector(1,1,1,2);
-	
+	int nX = 20;
+	int nY = 20;
+	int nZ = 20;
+
+	int MINX = -10;
+	int MAXX = 10;
+
+	int MINY = -10;
+	int MAXY = 10;
+
+	int MINZ = -10;
+	int MAXZ = 10;
+
+	//mp4Vector* vertices;	//first free the previous allocated memory
+	//delete [] vertices;	//first free the previous allocated memory
+	mp4Vector* vertices;
+	vertices = new mp4Vector[(nX+1)*(nY+1)*(nZ+1)];
+	mpVector stepSize((MAXX-MINX)/nX, (MAXY-MINY)/nY, (MAXZ-MINZ)/nZ);
+	for(int i=0; i < nX+1; i++)
+		for(int j=0; j < nY+1; j++)
+			for(int k=0; k < nZ+1; k++) {
+				mp4Vector vert(MINX+i*stepSize.x, MINY+j*stepSize.y, MINZ+k*stepSize.z, 0);
+				//vert.val = Potential((mpVector)vert);
+				vert.val = ( vert.x*vert.x + vert.y*vert.y + vert.z*vert.z );
+
+				std::cout << vert.val << std::endl;
+
+				vertices[i*(nY+1)*(nZ+1) + j*(nZ+1) + k] = vert;
+	}
+
 	Triangles = MarchingCubes(
-						/*int ncellsX*/ 1,
-						/*int ncellsY*/ 1,
-						/*int ncellsZ*/ 1,
-						/*float minValue*/ 1.0f,
+						/*int ncellsX*/ nX,
+						/*int ncellsY*/ nY,
+						/*int ncellsZ*/ nZ,
+						/*float minValue*/ 50.0f,
 						/*mp4Vector* */ vertices,
 						/*INTERSECTION*/ Promedio,
 						/*int & */ numTriangles
@@ -54,12 +75,14 @@ int main(int argc, char **argv)
 
 	//debug
 	std::cout << "numero de triangulos: " << numTriangles << std::endl;
+	/*
 	for(int i=0; i<numTriangles; i++){
 		std::cout << "triangulo " << i << ":" << std::endl;
 		for(int j=0; j<3; j++){
 			std::cout << "vertice " << j << ": (" << Triangles[i].p[j].x << "," << Triangles[i].p[j].y << "," << Triangles[i].p[j].z << ")" << std::endl;
 		}
 	}
+	*/
 	
 	OffFile* f = new OffFile(Triangles, numTriangles);
 	f->createOff();
@@ -162,6 +185,7 @@ int main(int argc, char **argv)
 mpVector Promedio(mp4Vector p1, mp4Vector p2, float value)
 {
 	//debug
+	/*
 	std::cout << "Promedio" << std::endl;
 
 	std::cout << "p1: (" << p1.x << "," << p1.y << "," << p1.z << "," << p1.val << ")" << std::endl;
@@ -169,6 +193,7 @@ mpVector Promedio(mp4Vector p1, mp4Vector p2, float value)
 	std::cout << "value: " << value << std::endl;
 	
 	std::cout << "interpolacion: " << ((mpVector)p1 + (mpVector)p2)/2 << std::endl;
+	*/
 	return ((mpVector)p1 + (mpVector)p2)/2;
 }
 
