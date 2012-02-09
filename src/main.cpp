@@ -63,15 +63,24 @@ int main(int argc, char **argv)
 				vertices[i*(nY+1)*(nZ+1) + j*(nZ+1) + k] = vert;
 	}
 
-	Triangles = MarchingCubes(
-						/*int ncellsX*/ nX,
-						/*int ncellsY*/ nY,
-						/*int ncellsZ*/ nZ,
-						/*float minValue*/ 50.0f,
-						/*mp4Vector* */ vertices,
-						/*INTERSECTION*/ Promedio,
-						/*int & */ numTriangles
-						);
+	//Triangles = MarchingCubes(
+	//						/*int ncellsX*/ nX,
+	//						/*int ncellsY*/ nY,
+	//						/*int ncellsZ*/ nZ,
+	//						/*float minValue*/ 50.0f,
+	//						/*mp4Vector* */ vertices,
+	//						/*INTERSECTION*/ LinearInterp,
+	//						/*int & */ numTriangles
+	//						);
+
+	Triangles = MarchingCubesLinear(
+							/*int ncellsY*/ nX,
+							/*int ncellsY*/ nY,
+							/*int ncellsZ*/ nZ,
+							/*float minValue*/ 50.0f,
+							/*mp4Vector* */ vertices,
+							/*int & */ numTriangles
+							);
 
 	//debug
 	std::cout << "numero de triangulos: " << numTriangles << std::endl;
