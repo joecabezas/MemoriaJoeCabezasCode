@@ -21,6 +21,7 @@
 #include <math.h>
 
 #include "../lib/mc/MarchingCubes.h"
+#include "Dataset/Dataset.h"
 #include "../lib/filehandlers/OffFile.h"
 
 #define MINVAL 1
@@ -57,9 +58,6 @@ int main(int argc, char **argv)
 				mp4Vector vert(MINX+i*stepSize.x, MINY+j*stepSize.y, MINZ+k*stepSize.z, 0);
 				//vert.val = Potential((mpVector)vert);
 				vert.val = ( vert.x*vert.x + vert.y*vert.y + vert.z*vert.z );
-
-				std::cout << vert.val << std::endl;
-
 				vertices[i*(nY+1)*(nZ+1) + j*(nZ+1) + k] = vert;
 	}
 
@@ -96,97 +94,10 @@ int main(int argc, char **argv)
 	OffFile* f = new OffFile(Triangles, numTriangles);
 	f->createOff();
 
-	/*
-	//escribiendo el OFF
-	std::cout << "OFF" << std::endl;
-	
-	//OFF Header
-	int vertices_debug = 8*8;
-	int faces_debug = 6*8;
-	int edges_debug = 12*8;
-	
-	int numero_vertices = numTriangles*3+vertices_debug;
-	
-	std::cout << numero_vertices << " " << numTriangles+faces_debug << " " << numTriangles*3+edges_debug << std::endl;
-	
-	//vertices
-	for(int i=0; i<numTriangles; i++){
-		for(int j=0; j<3; j++){
-			std::cout << Triangles[i].p[j].x << " " << Triangles[i].p[j].y << " " << Triangles[i].p[j].z << std::endl;
-		}
-	}
-	
-	//vertices de debug (cajas contenedoras de los vertices, para poder visualizarlos)
-	float delta = 0.1f;
-	//por cada vertice
-	for(int i=0; i<8; i++){
-		//hay que hacer 8 vertices de un cubo contenedor
-		//dejando al vertice actual dentro, en el centro
-		std::cout << vertices[i].x - delta << " " << vertices[i].y - delta << " " << vertices[i].z - delta << std::endl;
-		std::cout << vertices[i].x + delta << " " << vertices[i].y - delta << " " << vertices[i].z - delta << std::endl;
-		std::cout << vertices[i].x + delta << " " << vertices[i].y + delta << " " << vertices[i].z - delta << std::endl;
-		std::cout << vertices[i].x - delta << " " << vertices[i].y + delta << " " << vertices[i].z - delta << std::endl;
-		
-		std::cout << vertices[i].x - delta << " " << vertices[i].y - delta << " " << vertices[i].z + delta << std::endl;
-		std::cout << vertices[i].x + delta << " " << vertices[i].y - delta << " " << vertices[i].z + delta << std::endl;
-		std::cout << vertices[i].x + delta << " " << vertices[i].y + delta << " " << vertices[i].z + delta << std::endl;
-		std::cout << vertices[i].x - delta << " " << vertices[i].y + delta << " " << vertices[i].z + delta << std::endl;
-	}
-	
-	//faces
-	for(int i=0; i<numTriangles; i++){
-		std::cout << "3 " << i*3+0 << " " << i*3+1 << " " << i*3+2 << std::endl;
-	}
-	
-	//faces debug
-	numero_vertices = numTriangles*3;
-	//por cada vertice del cubo...
-	for(int i=0; i<8; i++){
-		//hay que espeficiar las 6 caras del cubo contenedor
-		std::cout << "4 ";
-		std::cout << numero_vertices+8*i+0 << " ";
-		std::cout << numero_vertices+8*i+1 << " ";
-		std::cout << numero_vertices+8*i+2 << " ";
-		std::cout << numero_vertices+8*i+3 << " ";
-		std::cout << std::endl;
-		
-		std::cout << "4 ";
-		std::cout << numero_vertices+8*i+0 << " ";
-		std::cout << numero_vertices+8*i+1 << " ";
-		std::cout << numero_vertices+8*i+4 << " ";
-		std::cout << numero_vertices+8*i+5 << " ";
-		std::cout << std::endl;
-		
-		std::cout << "4 ";
-		std::cout << numero_vertices+8*i+1 << " ";
-		std::cout << numero_vertices+8*i+2 << " ";
-		std::cout << numero_vertices+8*i+5 << " ";
-		std::cout << numero_vertices+8*i+6 << " ";
-		std::cout << std::endl;
-		
-		std::cout << "4 ";
-		std::cout << numero_vertices+8*i+2 << " ";
-		std::cout << numero_vertices+8*i+3 << " ";
-		std::cout << numero_vertices+8*i+6 << " ";
-		std::cout << numero_vertices+8*i+7 << " ";
-		std::cout << std::endl;
-		
-		std::cout << "4 ";
-		std::cout << numero_vertices+8*i+0 << " ";
-		std::cout << numero_vertices+8*i+3 << " ";
-		std::cout << numero_vertices+8*i+4 << " ";
-		std::cout << numero_vertices+8*i+7 << " ";
-		std::cout << std::endl;
-		
-		std::cout << "4 ";
-		std::cout << numero_vertices+8*i+4 << " ";
-		std::cout << numero_vertices+8*i+5 << " ";
-		std::cout << numero_vertices+8*i+6 << " ";
-		std::cout << numero_vertices+8*i+7 << " ";
-		std::cout << std::endl;
-		
-	}
-	*/
+	Dataset d;
+
+	//DatasetImage dsi = d[0];
+	std::cout << d[0][0][0] << std::endl;
 
 	return 0;
 }
@@ -205,20 +116,3 @@ mpVector Promedio(mp4Vector p1, mp4Vector p2, float value)
 	*/
 	return ((mpVector)p1 + (mpVector)p2)/2;
 }
-
-//asi se rellenan los datos
-/*
-void GLCanvas::InitData()
-{
-	delete [] mcPoints;	//first free the previous allocated memory
-	mcPoints = new mp4Vector[(nX+1)*(nY+1)*(nZ+1)];
-	mpVector stepSize((MAXX-MINX)/nX, (MAXY-MINY)/nY, (MAXZ-MINZ)/nZ);
-	for(int i=0; i < nX+1; i++)
-		for(int j=0; j < nY+1; j++)
-			for(int k=0; k < nZ+1; k++) {
-				mp4Vector vert(MINX+i*stepSize.x, MINY+j*stepSize.y, MINZ+k*stepSize.z, 0);
-				vert.val = Potential((mpVector)vert);
-				mcPoints[i*(nY+1)*(nZ+1) + j*(nZ+1) + k] = vert;
-	}
-}
-*/
