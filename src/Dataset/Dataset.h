@@ -14,19 +14,23 @@
 
 typedef std::vector<DatasetImage> vector_dataset_images;
 
-class Dataset {
-public:
-	Dataset();
-	virtual ~Dataset();
+class Dataset
+{
+	public:
 
-	void setup();
+		Dataset();
+		virtual ~Dataset();
 
-	DatasetImage& operator[](const int);
+		DatasetImage& operator[](const int);
 
-private:
+		void AddImage(const char *);
 
-	vector_dataset_images images;
-	int test;
+	private:
+
+		void setup();
+
+		vector_dataset_images images;
+		int test;
 };
 
 #endif /* DATASET_H_ */

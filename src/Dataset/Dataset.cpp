@@ -24,12 +24,18 @@ void Dataset::setup()
 	vector_dataset_images ti;
 	this->images = ti;
 
-	DatasetImage dsi;
-	this->images.push_back(dsi);
+	//DatasetImage dsi = DatasetImage("asdas");
+	//this->images.push_back(dsi);
 }
 
 //OPERATORS
 DatasetImage& Dataset::operator[] (const int index)
 {
 	return this->images[index];
+}
+
+void Dataset::AddImage(const char *filename)
+{
+	DatasetImage dsi = DatasetImage(filename);
+	this->images.push_back(dsi);
 }

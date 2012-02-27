@@ -10,23 +10,30 @@
 
 #include <vector>
 
-typedef std::vector<int> vector_int;
-typedef std::vector< vector_int > matrix_int;
+#include <string>
+#include <fstream>
+
+typedef int pixel;
+typedef std::vector<pixel> vector_pixel;
+typedef std::vector< vector_pixel > matrix_pixel;
 
 class DatasetImage
 {
 	public:
 
-		DatasetImage();
+		DatasetImage(const char *filename);
 		virtual ~DatasetImage();
 
 		void setup();
 
-		vector_int& operator[](const int);
+		vector_pixel& operator[](const int);
 
 	private:
 
-		matrix_int points;
+		matrix_pixel points;
+
+		std::string filename;
+		std::ifstream* file;
 };
 
 #endif /* DATASETIMAGE_H_ */

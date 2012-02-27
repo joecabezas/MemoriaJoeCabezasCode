@@ -7,28 +7,35 @@
 
 #include "DatasetImage.h"
 
-DatasetImage::DatasetImage() {
-	// TODO Auto-generated constructor stub
+DatasetImage::DatasetImage(const char *filename)
+{
+	this->filename = filename;
 	this->setup();
 }
 
-DatasetImage::~DatasetImage() {
-	// TODO Auto-generated destructor stub
+DatasetImage::~DatasetImage()
+{
 }
 
 void DatasetImage::setup()
 {
-	matrix_int tm;
+	//create file pointer
+	this->file = new std::ifstream();
+
+	//open file
+	//this->file->open(filename);
+
+	matrix_pixel tm;
 	this->points = tm;
 
-	vector_int v1;
+	vector_pixel v1;
 	this->points.push_back(v1);
 
 	this->points[0].push_back(11);
 }
 
 //OPERATORS
-vector_int& DatasetImage::operator[] (const int index)
+vector_pixel& DatasetImage::operator[] (const int index)
 {
 	return this->points[index];
 }
