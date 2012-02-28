@@ -11,7 +11,9 @@
 #include <vector>
 
 #include <string>
+#include <iostream>
 #include <fstream>
+#include <cstdlib>
 
 typedef int pixel;
 typedef std::vector<pixel> vector_pixel;
@@ -30,9 +32,14 @@ class DatasetImage
 
 	private:
 
+		//PGM data
+		std::size_t width;
+		std::size_t height;
+		std::size_t maxval;
+
 		matrix_pixel points;
 
-		std::string filename;
+		const char *filename;
 		std::ifstream* file;
 };
 

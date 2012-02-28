@@ -24,11 +24,6 @@
 #include "Dataset/Dataset.h"
 #include "../lib/filehandlers/OffFile.h"
 
-//tmp
-#include <iostream>
-#include <fstream>
-#include <cstdlib>
-
 #define MINVAL 1
 #define D 1
 
@@ -36,52 +31,6 @@ mpVector Promedio(mp4Vector p1, mp4Vector p2, float value);
 
 int main(int argc, char **argv)
 {
-	std::ifstream file (argv[1], std::fstream::in | std::fstream::binary);
-
-	if(file.is_open())
-	{
-		std::string s;
-
-		//ignore header type
-		file >> s;
-
-		//read width
-		file >> s;
-		unsigned int width = std::atoi(s.c_str());
-		std::cout << width << std::endl;
-
-		//read height
-		file >> s;
-		unsigned int height = std::atoi(s.c_str());
-		std::cout << height << std::endl;
-
-		//read max value
-		file >> s;
-		unsigned int maxval = std::atoi(s.c_str());
-		std::cout << maxval << std::endl;
-
-		int i;
-		while (file.good())
-		{
-			i = file.get();
-
-			if(i < 0)
-				continue;
-
-			std::cout << i << ',';
-		}
-	}
-
-	file.close();
-
-	std::cout << std::endl;
-
-	//ejemplo para leer argv
-	for (int i = 1; i < argc; ++i)
-	{
-		//std::cout << "argv[" << i << "] = " << argv[i] << std::endl;
-	}
-
 	Dataset d;
 
 	for (int i = 1; i < argc; ++i)
@@ -91,6 +40,14 @@ int main(int argc, char **argv)
 
 	//DatasetImage dsi = d[0];
 	std::cout << d[0][0][0] << std::endl;
+	std::cout << d[0][0][1] << std::endl;
+	std::cout << d[0][0][2] << std::endl;
+	std::cout << d[0][1][0] << std::endl;
+	std::cout << d[0][1][1] << std::endl;
+	std::cout << d[0][1][2] << std::endl;
+	std::cout << d[0][2][0] << std::endl;
+	std::cout << d[0][2][1] << std::endl;
+	std::cout << d[0][2][2] << std::endl;
 
 	return 0;
 
