@@ -44,7 +44,7 @@ void Dataset::AddImage(const char *filename)
 	this->number_of_images++;
 }
 
-pixel Dataset::getPixelValueAt(unsigned int x, unsigned int y, unsigned int z)
+pixel_value Dataset::getPixelValueAt(unsigned int x, unsigned int y, unsigned int z)
 {
 	return this->images[z][x][y];
 }
@@ -66,7 +66,7 @@ unsigned int Dataset::getNumPixelsOnAxis(AXIS a)
 			number = this->images[0].getWidth();
 			break;
 		case Y:
-			number = this->images[1].getHeight();
+			number = this->images[0].getHeight();
 			break;
 		case Z:
 			number = this->number_of_images;

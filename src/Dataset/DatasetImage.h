@@ -15,8 +15,8 @@
 #include <fstream>
 #include <cstdlib>
 
-typedef int pixel;
-typedef std::vector<pixel> vector_pixel;
+typedef int pixel_value;
+typedef std::vector<pixel_value> vector_pixel;
 typedef std::vector< vector_pixel > matrix_pixel;
 
 class DatasetImage

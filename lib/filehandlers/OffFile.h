@@ -14,7 +14,7 @@
 
 class OffFile {
 public:
-	OffFile(TRIANGLE*, std::size_t);
+	OffFile(vector_triangles, std::size_t);
 	virtual ~OffFile();
 
 	void createOff();
@@ -27,7 +27,7 @@ private:
 	void createFaces();
 
 	//members
-	TRIANGLE* triangles;
+	vector_triangles triangles;
 	std::size_t num_triangles;
 	std::size_t num_vertices;
 	std::size_t num_faces;

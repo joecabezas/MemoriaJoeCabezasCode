@@ -263,9 +263,8 @@ TRIANGLE* MarchingCubesLinear(float mcMinX, float mcMaxX, float mcMinY, float mc
 }
 
 //JOE
-std::vector< TRIANGLE > MarchingCubes(
+std::vector< TRIANGLE > MarchingCubesDataset(
 	float minValue,
-	mp4Vector * points,
 	Dataset dataset,
 
 	INTERSECTION intersection,
@@ -273,23 +272,14 @@ std::vector< TRIANGLE > MarchingCubes(
 )
 {
 
-	unsigned int ncellsX = dataset.getNumPixelsOnAxis(dataset.X);
-	unsigned int ncellsY = dataset.getNumPixelsOnAxis(dataset.Y);
-	unsigned int ncellsZ = dataset.getNumPixelsOnAxis(dataset.Z);
+	unsigned int ncellsX = dataset.getNumPixelsOnAxis(dataset.X) - 1;
+	unsigned int ncellsY = dataset.getNumPixelsOnAxis(dataset.Y) - 1;
+	unsigned int ncellsZ = dataset.getNumPixelsOnAxis(dataset.Z) - 1;
 
-	TRIANGLE t;
-	std::cout << "size of a TRIANGLE: " << sizeof(t) << std::endl;
-	std::cout << "creating " << 3*ncellsX*ncellsY*ncellsZ << " triangles" << std::endl;
-	std::cout << "width a length of: " << 3*ncellsX*ncellsY*ncellsZ*sizeof(t) << std::endl;
-
-	//TRIANGLE * triangles = new TRIANGLE[3*ncellsX*ncellsY*ncellsZ];//this should be enough space, if not change 4 to 5
 	std::vector< TRIANGLE > triangles;
-
-	std::cout << "after allocation: " << sizeof(t) << std::endl;
 
 	numTriangles = int(0);
 
-	int YtimeZ = (ncellsY+1)*(ncellsZ+1);
 	//go through all the points
 	for(unsigned int i=0; i < ncellsX; i++)			//x axis
 		for(unsigned int j=0; j < ncellsY; j++)		//y axis
@@ -297,11 +287,12 @@ std::vector< TRIANGLE > MarchingCubes(
 			{
 				//initialize vertices
 				mp4Vector verts[8];
-				int ind = i*YtimeZ + j*(ncellsZ+1) + k;
+				//int ind = i*YtimeZ + j*(ncellsZ+1) + k;
 
 				//(step 3)
 
 				//VERSION ORIGINAL
+				/*
 				verts[0] = points[ind];
 				verts[1] = points[ind + YtimeZ];
 				verts[2] = points[ind + YtimeZ + 1];
@@ -310,6 +301,25 @@ std::vector< TRIANGLE > MarchingCubes(
 				verts[5] = points[ind + YtimeZ + (ncellsZ+1)];
 				verts[6] = points[ind + YtimeZ + (ncellsZ+1) + 1];
 				verts[7] = points[ind + (ncellsZ+1) + 1];
+				*/
+
+				verts[0].x = i;		verts[0].y = j;		verts[0].z = k;
+				verts[1].x = i;		verts[1].y = j;		verts[1].z = k+1;
+				verts[2].x = i+1;	verts[2].y = j;		verts[2].z = k+1;
+				verts[3].x = i+1;	verts[3].y = j;		verts[3].z = k;
+				verts[4].x = i;		verts[4].y = j+1;	verts[4].z = k;
+				verts[5].x = i;		verts[5].y = j+1;	verts[5].z = k+1;
+				verts[6].x = i+1;	verts[6].y = j+1;	verts[6].z = k+1;
+				verts[7].x = i+1;	verts[7].y = j+1;	verts[7].z = k;
+
+				verts[0].val = dataset.getPixelValueAt(i,		j,		k);
+				verts[1].val = dataset.getPixelValueAt(i,		j,		k+1);
+				verts[2].val = dataset.getPixelValueAt(i+1,		j,		k+1);
+				verts[3].val = dataset.getPixelValueAt(i+1,		j,		k);
+				verts[4].val = dataset.getPixelValueAt(i,		j+1,	k);
+				verts[5].val = dataset.getPixelValueAt(i,		j+1,	k+1);
+				verts[6].val = dataset.getPixelValueAt(i+1,		j+1,	k+1);
+				verts[7].val = dataset.getPixelValueAt(i+1,		j+1,	k);
 
 				//get the index
 				int cubeIndex = int(0);
@@ -330,7 +340,6 @@ std::vector< TRIANGLE > MarchingCubes(
 				mpVector intVerts[12];
 
 				/*(step 6)*/
-
 				if(edgeTable[cubeIndex] & 1) intVerts[0] = intersection(verts[0], verts[1], minValue);
 				if(edgeTable[cubeIndex] & 2) intVerts[1] = intersection(verts[1], verts[2], minValue);
 				if(edgeTable[cubeIndex] & 4) intVerts[2] = intersection(verts[2], verts[3], minValue);

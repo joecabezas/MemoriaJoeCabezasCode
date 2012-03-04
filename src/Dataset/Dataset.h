@@ -25,7 +25,7 @@ class Dataset
 
 		void AddImage(const char *);
 
-		pixel getPixelValueAt(unsigned int, unsigned int, unsigned int);
+		pixel_value getPixelValueAt(unsigned int, unsigned int, unsigned int);
 
 		//AXIS NAMES
 		enum AXIS {X,Y,Z};

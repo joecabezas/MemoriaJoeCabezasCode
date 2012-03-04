@@ -38,7 +38,7 @@ int main(int argc, char **argv)
 	//return 0;
 	 */
 
-	std::cout << "version 3 marzo 1114" << std::endl;
+	std::cout << "version 4 marzo 1910" << std::endl;
 
 	Dataset d;
 
@@ -81,7 +81,7 @@ int main(int argc, char **argv)
 
 	//return 0;
 
-	TRIANGLE * Triangles;
+	//TRIANGLE * Triangles;
 	int numTriangles;
 	
 	float minval = 50.0f;
@@ -113,17 +113,19 @@ int main(int argc, char **argv)
 				vertices[i*(nY+1)*(nZ+1) + j*(nZ+1) + k] = vert;
 	}
 
-	Triangles = MarchingCubes(
-							/*int ncellsX*/ nX,
-							/*int ncellsY*/ nY,
-							/*int ncellsZ*/ nZ,
-							/*float minValue*/ minval,
-							/*mp4Vector* */ vertices,
-							/*INTERSECTION*/ Promedio,
-							/*int & */ numTriangles
-						);
+	//Triangles = MarchingCubes(
+	//						/*int ncellsX*/ nX,
+	//						/*int ncellsY*/ nY,
+	//						/*int ncellsZ*/ nZ,
+	//						/*float minValue*/ minval,
+	//						/*mp4Vector* */ vertices,
+	//						/*INTERSECTION*/ Promedio,
+	//						/*int & */ numTriangles
+	//					);
 
 	//Triangles = MarchingCubesLinear(nX, nY, nZ, 50.0f, vertices, numTriangles);
+
+	vector_triangles Triangles = MarchingCubesDataset(50.0f, d, LinearInterp, numTriangles);
 
 	//debug
 	std::cout << "numero de triangulos: " << numTriangles << std::endl;

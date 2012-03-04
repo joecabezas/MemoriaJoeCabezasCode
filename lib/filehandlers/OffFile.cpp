@@ -9,7 +9,7 @@
 
 #define length(x) (sizeof(x)/sizeof(x[0]))
 
-OffFile::OffFile(TRIANGLE* t, std::size_t num_triangles)
+OffFile::OffFile(vector_triangles t, std::size_t num_triangles)
 {
 	this->triangles = t;
 	this->num_triangles = num_triangles;
@@ -19,7 +19,7 @@ OffFile::OffFile(TRIANGLE* t, std::size_t num_triangles)
 
 void OffFile::setup()
 {
-	this->num_vertices =		this->num_triangles * 3;
+	this->num_vertices =	this->num_triangles * 3;
 	this->num_faces =		this->num_triangles;
 	this->num_edges =		this->num_triangles * 3;
 
@@ -111,6 +111,6 @@ void OffFile::createFaces()
 
 OffFile::~OffFile()
 {
-	delete this->triangles;
+	this->triangles.clear();
 }
 

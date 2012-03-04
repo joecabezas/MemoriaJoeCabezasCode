@@ -24,6 +24,8 @@ typedef struct {
 	mpVector norm;
 } TRIANGLE;
 
+typedef std::vector< TRIANGLE > vector_triangles;
+
 //does Linear Interpolation between points p1 and p2 (they already contain their computed values)
 mpVector LinearInterp(mp4Vector p1, mp4Vector p2, float value);
 
@@ -121,9 +123,8 @@ TRIANGLE* MarchingCubesLinear(
 );
 
 //JOE
-std::vector< TRIANGLE > MarchingCubes(
+std::vector< TRIANGLE > MarchingCubesDataset(
 	float minValue,
-	mp4Vector * points,
 	Dataset dataset,
 
 	INTERSECTION intersection,
