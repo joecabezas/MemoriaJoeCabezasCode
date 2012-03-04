@@ -30,6 +30,9 @@ class DatasetImage
 
 		vector_pixel& operator[](const int);
 
+		std::size_t getWidth();
+		std::size_t getHeight();
+
 	private:
 
 		//PGM data

@@ -82,3 +82,13 @@ vector_pixel& DatasetImage::operator[] (const int index)
 {
 	return this->points[index];
 }
+
+std::size_t DatasetImage::getWidth()
+{
+	return this->width;
+}
+
+std::size_t DatasetImage::getHeight()
+{
+	return this->height;
+}

@@ -16,6 +16,9 @@
 #include "mpVector.h"
 #include "MCTable.h"
 
+//joe
+#include "../../src/Dataset/Dataset.h"
+
 typedef struct {
 	mpVector p[3];
 	mpVector norm;
@@ -114,6 +117,16 @@ TRIANGLE* MarchingCubesLinear(
 	float minValue, 
 	
 	FORMULA formula,
+	int &numTriangles
+);
+
+//JOE
+std::vector< TRIANGLE > MarchingCubes(
+	float minValue,
+	mp4Vector * points,
+	Dataset dataset,
+
+	INTERSECTION intersection,
 	int &numTriangles
 );
 

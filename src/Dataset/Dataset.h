@@ -25,12 +25,19 @@ class Dataset
 
 		void AddImage(const char *);
 
+		pixel getPixelValueAt(unsigned int, unsigned int, unsigned int);
+
+		//AXIS NAMES
+		enum AXIS {X,Y,Z};
+
+		unsigned int getNumPixelsOnAxis(AXIS);
+
 	private:
 
 		void setup();
 
 		vector_dataset_images images;
-		int test;
+		std::size_t number_of_images;
 };
 
 #endif /* DATASET_H_ */

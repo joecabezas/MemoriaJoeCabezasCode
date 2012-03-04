@@ -31,6 +31,15 @@ mpVector Promedio(mp4Vector p1, mp4Vector p2, float value);
 
 int main(int argc, char **argv)
 {
+	/*for (int i = 1; i < argc; ++i)
+	{
+		std::cout << argv[i] << std::endl;
+	}
+	//return 0;
+	 */
+
+	std::cout << "version 3 marzo 1114" << std::endl;
+
 	Dataset d;
 
 	for (int i = 1; i < argc; ++i)
@@ -38,7 +47,7 @@ int main(int argc, char **argv)
 		d.AddImage(argv[i]);
 	}
 
-	//DatasetImage dsi = d[0];
+	/*
 	std::cout << d[0][0][0] << std::endl;
 	std::cout << d[0][0][1] << std::endl;
 	std::cout << d[0][0][2] << std::endl;
@@ -48,24 +57,47 @@ int main(int argc, char **argv)
 	std::cout << d[0][2][0] << std::endl;
 	std::cout << d[0][2][1] << std::endl;
 	std::cout << d[0][2][2] << std::endl;
+	*/
 
-	return 0;
+	/*
+	std::cout << d[1][0][0] << std::endl;
+	std::cout << d[1][0][1] << std::endl;
+	std::cout << d[1][0][2] << std::endl;
+	std::cout << d[1][1][0] << std::endl;
+	std::cout << d[1][1][1] << std::endl;
+	std::cout << d[1][1][2] << std::endl;
+	std::cout << d[1][2][0] << std::endl;
+	std::cout << d[1][2][1] << std::endl;
+	std::cout << d[1][2][2] << std::endl;
+	*/
+
+	std::cout << d.getPixelValueAt(0,0,0) << std::endl;
+	std::cout << d.getPixelValueAt(0,1,0) << std::endl;
+	std::cout << d.getPixelValueAt(0,2,0) << std::endl;
+
+	std::cout << d.getPixelValueAt(0,0,1) << std::endl;
+	std::cout << d.getPixelValueAt(0,1,1) << std::endl;
+	std::cout << d.getPixelValueAt(0,2,1) << std::endl;
+
+	//return 0;
 
 	TRIANGLE * Triangles;
 	int numTriangles;
 	
-	int nX = 20;
-	int nY = 20;
-	int nZ = 20;
+	float minval = 50.0f;
 
-	int MINX = -10;
-	int MAXX = 10;
+	int nX = 300;
+	int nY = 300;
+	int nZ = 300;
 
-	int MINY = -10;
-	int MAXY = 10;
+	int MINX = -300;
+	int MAXX = 300;
 
-	int MINZ = -10;
-	int MAXZ = 10;
+	int MINY = -300;
+	int MAXY = 300;
+
+	int MINZ = -300;
+	int MAXZ = 300;
 
 	//mp4Vector* vertices;	//first free the previous allocated memory
 	//delete [] vertices;	//first free the previous allocated memory
@@ -81,24 +113,17 @@ int main(int argc, char **argv)
 				vertices[i*(nY+1)*(nZ+1) + j*(nZ+1) + k] = vert;
 	}
 
-	//Triangles = MarchingCubes(
-	//						/*int ncellsX*/ nX,
-	//						/*int ncellsY*/ nY,
-	//						/*int ncellsZ*/ nZ,
-	//						/*float minValue*/ 50.0f,
-	//						/*mp4Vector* */ vertices,
-	//						/*INTERSECTION*/ LinearInterp,
-	//						/*int & */ numTriangles
-	//						);
-
-	Triangles = MarchingCubesLinear(
-							/*int ncellsY*/ nX,
+	Triangles = MarchingCubes(
+							/*int ncellsX*/ nX,
 							/*int ncellsY*/ nY,
 							/*int ncellsZ*/ nZ,
-							/*float minValue*/ 50.0f,
+							/*float minValue*/ minval,
 							/*mp4Vector* */ vertices,
+							/*INTERSECTION*/ Promedio,
 							/*int & */ numTriangles
-							);
+						);
+
+	//Triangles = MarchingCubesLinear(nX, nY, nZ, 50.0f, vertices, numTriangles);
 
 	//debug
 	std::cout << "numero de triangulos: " << numTriangles << std::endl;

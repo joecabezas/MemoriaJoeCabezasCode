@@ -261,3 +261,121 @@ TRIANGLE* MarchingCubesLinear(float mcMinX, float mcMaxX, float mcMinY, float mc
 	return MarchingCubes(mcMinX, mcMaxX, mcMinY, mcMaxY, mcMinZ, mcMaxZ, ncellsX, ncellsY, ncellsZ, minValue,
 		formula, LinearInterp, numTriangles);
 }
+
+//JOE
+std::vector< TRIANGLE > MarchingCubes(
+	float minValue,
+	mp4Vector * points,
+	Dataset dataset,
+
+	INTERSECTION intersection,
+	int &numTriangles
+)
+{
+
+	unsigned int ncellsX = dataset.getNumPixelsOnAxis(dataset.X);
+	unsigned int ncellsY = dataset.getNumPixelsOnAxis(dataset.Y);
+	unsigned int ncellsZ = dataset.getNumPixelsOnAxis(dataset.Z);
+
+	TRIANGLE t;
+	std::cout << "size of a TRIANGLE: " << sizeof(t) << std::endl;
+	std::cout << "creating " << 3*ncellsX*ncellsY*ncellsZ << " triangles" << std::endl;
+	std::cout << "width a length of: " << 3*ncellsX*ncellsY*ncellsZ*sizeof(t) << std::endl;
+
+	//TRIANGLE * triangles = new TRIANGLE[3*ncellsX*ncellsY*ncellsZ];//this should be enough space, if not change 4 to 5
+	std::vector< TRIANGLE > triangles;
+
+	std::cout << "after allocation: " << sizeof(t) << std::endl;
+
+	numTriangles = int(0);
+
+	int YtimeZ = (ncellsY+1)*(ncellsZ+1);
+	//go through all the points
+	for(unsigned int i=0; i < ncellsX; i++)			//x axis
+		for(unsigned int j=0; j < ncellsY; j++)		//y axis
+			for(unsigned int k=0; k < ncellsZ; k++)	//z axis
+			{
+				//initialize vertices
+				mp4Vector verts[8];
+				int ind = i*YtimeZ + j*(ncellsZ+1) + k;
+
+				//(step 3)
+
+				//VERSION ORIGINAL
+				verts[0] = points[ind];
+				verts[1] = points[ind + YtimeZ];
+				verts[2] = points[ind + YtimeZ + 1];
+				verts[3] = points[ind + 1];
+				verts[4] = points[ind + (ncellsZ+1)];
+				verts[5] = points[ind + YtimeZ + (ncellsZ+1)];
+				verts[6] = points[ind + YtimeZ + (ncellsZ+1) + 1];
+				verts[7] = points[ind + (ncellsZ+1) + 1];
+
+				//get the index
+				int cubeIndex = int(0);
+				for(int n=0; n < 8; n++)
+				{
+					/*(step 4)*/
+					if(verts[n].val <= minValue)
+						cubeIndex |= (1 << n);
+				}
+
+				//check if its completely inside or outside
+
+				/*(step 5)*/
+				if(!edgeTable[cubeIndex])
+					continue;
+
+				//get intersection vertices on edges and save into the array
+				mpVector intVerts[12];
+
+				/*(step 6)*/
+
+				if(edgeTable[cubeIndex] & 1) intVerts[0] = intersection(verts[0], verts[1], minValue);
+				if(edgeTable[cubeIndex] & 2) intVerts[1] = intersection(verts[1], verts[2], minValue);
+				if(edgeTable[cubeIndex] & 4) intVerts[2] = intersection(verts[2], verts[3], minValue);
+				if(edgeTable[cubeIndex] & 8) intVerts[3] = intersection(verts[3], verts[0], minValue);
+				if(edgeTable[cubeIndex] & 16) intVerts[4] = intersection(verts[4], verts[5], minValue);
+				if(edgeTable[cubeIndex] & 32) intVerts[5] = intersection(verts[5], verts[6], minValue);
+				if(edgeTable[cubeIndex] & 64) intVerts[6] = intersection(verts[6], verts[7], minValue);
+				if(edgeTable[cubeIndex] & 128) intVerts[7] = intersection(verts[7], verts[4], minValue);
+				if(edgeTable[cubeIndex] & 256) intVerts[8] = intersection(verts[0], verts[4], minValue);
+				if(edgeTable[cubeIndex] & 512) intVerts[9] = intersection(verts[1], verts[5], minValue);
+				if(edgeTable[cubeIndex] & 1024) intVerts[10] = intersection(verts[2], verts[6], minValue);
+				if(edgeTable[cubeIndex] & 2048) intVerts[11] = intersection(verts[3], verts[7], minValue);
+
+				//now build the triangles using triTable
+				for (int n=0; triTable[cubeIndex][n] != -1; n+=3)
+				{
+					/*(step 7)*/
+					//triangles[numTriangles].p[0] = intVerts[triTable[cubeIndex][n+2]];
+					//triangles[numTriangles].p[1] = intVerts[triTable[cubeIndex][n+1]];
+					//triangles[numTriangles].p[2] = intVerts[triTable[cubeIndex][n]];
+					TRIANGLE t;
+					t.p[0] = intVerts[triTable[cubeIndex][n+2]];
+					t.p[1] = intVerts[triTable[cubeIndex][n+1]];
+					t.p[2] = intVerts[triTable[cubeIndex][n]];
+
+					triangles.push_back(t);
+
+					/*(step 8)*/
+					//triangles[numTriangles].norm = ((triangles[numTriangles].p[1] -
+					//								triangles[numTriangles].p[0]).Cross(triangles[numTriangles].p[2] -
+					//								triangles[numTriangles].p[0])).Normalize();
+
+					numTriangles++;
+				}
+
+			}	//END OF FOR LOOP
+
+		//free all the wasted space
+		//TRIANGLE * retTriangles = new TRIANGLE[numTriangles];
+		//for(int i=0; i < numTriangles; i++)
+		//{
+		//	retTriangles[i] = triangles[i];
+		//}
+
+		//delete [] triangles;
+
+	return triangles;
+}
