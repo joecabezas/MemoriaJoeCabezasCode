@@ -40,6 +40,8 @@ class DatasetImage
 		std::size_t height;
 		std::size_t maxval;
 
+		bool is_16_bit;
+
 		matrix_pixel points;
 
 		const char *filename;

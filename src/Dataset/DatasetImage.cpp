@@ -49,6 +49,18 @@ void DatasetImage::setup()
 		this->maxval = std::atoi(s.c_str());
 		//std::cout << this->maxval << std::endl;
 
+		//check if file is 16bit per pixel
+		this->is_16_bit = false;
+
+		if(this->maxval == 0xffff)
+		{
+			std::cout << "is a 16bit file" << std::endl;
+			this->is_16_bit = true;
+		}
+
+		if(this->maxval == 0xff)
+			std::cout << "is a 8bit file" << std::endl;
+
 		//ignore next separator (0x0A)
 		this->file->get();
 
@@ -57,6 +69,13 @@ void DatasetImage::setup()
 		while (this->file->good())
 		{
 			pixel_value = this->file->get();
+
+			//TODO: check endianness
+
+			//concatenate with next byte
+			//if this is a 16bit file per pixel
+			if(this->is_16_bit)
+				pixel_value = pixel_value | (this->file->get() << 8);
 
 			//check if we need to create a new row of pixels (vector_pixel)
 			if(counter % this->width == 0)

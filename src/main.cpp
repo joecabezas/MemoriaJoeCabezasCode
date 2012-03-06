@@ -31,14 +31,13 @@ mpVector Promedio(mp4Vector p1, mp4Vector p2, float value);
 
 int main(int argc, char **argv)
 {
-	/*for (int i = 1; i < argc; ++i)
+	/*
+	for (int i = 1; i < argc; ++i)
 	{
 		std::cout << argv[i] << std::endl;
 	}
+	*/
 	//return 0;
-	 */
-
-	std::cout << "version 4 marzo 1910" << std::endl;
 
 	Dataset d;
 
@@ -48,29 +47,6 @@ int main(int argc, char **argv)
 	}
 
 	/*
-	std::cout << d[0][0][0] << std::endl;
-	std::cout << d[0][0][1] << std::endl;
-	std::cout << d[0][0][2] << std::endl;
-	std::cout << d[0][1][0] << std::endl;
-	std::cout << d[0][1][1] << std::endl;
-	std::cout << d[0][1][2] << std::endl;
-	std::cout << d[0][2][0] << std::endl;
-	std::cout << d[0][2][1] << std::endl;
-	std::cout << d[0][2][2] << std::endl;
-	*/
-
-	/*
-	std::cout << d[1][0][0] << std::endl;
-	std::cout << d[1][0][1] << std::endl;
-	std::cout << d[1][0][2] << std::endl;
-	std::cout << d[1][1][0] << std::endl;
-	std::cout << d[1][1][1] << std::endl;
-	std::cout << d[1][1][2] << std::endl;
-	std::cout << d[1][2][0] << std::endl;
-	std::cout << d[1][2][1] << std::endl;
-	std::cout << d[1][2][2] << std::endl;
-	*/
-
 	std::cout << d.getPixelValueAt(0,0,0) << std::endl;
 	std::cout << d.getPixelValueAt(0,1,0) << std::endl;
 	std::cout << d.getPixelValueAt(0,2,0) << std::endl;
@@ -78,57 +54,19 @@ int main(int argc, char **argv)
 	std::cout << d.getPixelValueAt(0,0,1) << std::endl;
 	std::cout << d.getPixelValueAt(0,1,1) << std::endl;
 	std::cout << d.getPixelValueAt(0,2,1) << std::endl;
+	*/
 
 	//return 0;
 
-	//TRIANGLE * Triangles;
 	int numTriangles;
-	
-	float minval = 50.0f;
+	float minval = 65535.0f * 0.4f;
 
-	int nX = 300;
-	int nY = 300;
-	int nZ = 300;
-
-	int MINX = -300;
-	int MAXX = 300;
-
-	int MINY = -300;
-	int MAXY = 300;
-
-	int MINZ = -300;
-	int MAXZ = 300;
-
-	//mp4Vector* vertices;	//first free the previous allocated memory
-	//delete [] vertices;	//first free the previous allocated memory
-	mp4Vector* vertices;
-	vertices = new mp4Vector[(nX+1)*(nY+1)*(nZ+1)];
-	mpVector stepSize((MAXX-MINX)/nX, (MAXY-MINY)/nY, (MAXZ-MINZ)/nZ);
-	for(int i=0; i < nX+1; i++)
-		for(int j=0; j < nY+1; j++)
-			for(int k=0; k < nZ+1; k++) {
-				mp4Vector vert(MINX+i*stepSize.x, MINY+j*stepSize.y, MINZ+k*stepSize.z, 0);
-				//vert.val = Potential((mpVector)vert);
-				vert.val = ( vert.x*vert.x + vert.y*vert.y + vert.z*vert.z );
-				vertices[i*(nY+1)*(nZ+1) + j*(nZ+1) + k] = vert;
-	}
-
-	//Triangles = MarchingCubes(
-	//						/*int ncellsX*/ nX,
-	//						/*int ncellsY*/ nY,
-	//						/*int ncellsZ*/ nZ,
-	//						/*float minValue*/ minval,
-	//						/*mp4Vector* */ vertices,
-	//						/*INTERSECTION*/ Promedio,
-	//						/*int & */ numTriangles
-	//					);
-
-	//Triangles = MarchingCubesLinear(nX, nY, nZ, 50.0f, vertices, numTriangles);
-
-	vector_triangles Triangles = MarchingCubesDataset(50.0f, d, LinearInterp, numTriangles);
+	vector_triangles Triangles = MarchingCubesDataset(minval, d, LinearInterp, numTriangles);
 
 	//debug
+	std::cout << "valor minimo: " << minval << std::endl;
 	std::cout << "numero de triangulos: " << numTriangles << std::endl;
+
 	/*
 	for(int i=0; i<numTriangles; i++){
 		std::cout << "triangulo " << i << ":" << std::endl;
