@@ -25,9 +25,6 @@ void Dataset::setup()
 	this->images = ti;
 
 	this->number_of_images = 0;
-
-	//DatasetImage dsi = DatasetImage("asdas");
-	//this->images.push_back(dsi);
 }
 
 //OPERATORS
@@ -58,7 +55,7 @@ unsigned int Dataset::getNumPixelsOnAxis(AXIS a)
 		exit(EXIT_FAILURE);
 	}
 
-	unsigned int number;
+	unsigned int number = 0;
 
 	switch(a)
 	{

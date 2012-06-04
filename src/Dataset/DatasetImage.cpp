@@ -25,7 +25,20 @@ void DatasetImage::setup()
 
 	//create file pointer and open file
 	this->file = new std::ifstream();
-	this->file->open(this->filename, std::fstream::in | std::fstream::binary);
+	this->file->exceptions(std::ifstream::failbit | std::ifstream::badbit);
+	try
+	{
+		this->file->open(this->filename, std::fstream::in | std::fstream::binary);
+	}
+	catch(std::ifstream::failure& e)
+	{
+		std::cout
+			<< "Exception opening/reading file"
+			<< e.what()
+			<< std::endl;
+
+		exit(EXIT_FAILURE);
+	}
 
 	if(this->file->is_open())
 	{
@@ -54,19 +67,19 @@ void DatasetImage::setup()
 
 		if(this->maxval == 0xffff)
 		{
-			std::cout << "is a 16bit file" << std::endl;
+			//std::cout << "is a 16bit file" << std::endl;
 			this->is_16_bit = true;
 		}
 
 		if(this->maxval == 0xff)
-			std::cout << "is a 8bit file" << std::endl;
+			//std::cout << "is a 8bit file" << std::endl;
 
 		//ignore next separator (0x0A)
 		this->file->get();
 
 		unsigned int pixel_value;
-		unsigned int counter = 0;
-		while (this->file->good())
+
+		for(unsigned int i=0; i<this->width*this->height; i++)
 		{
 			pixel_value = this->file->get();
 
@@ -78,19 +91,21 @@ void DatasetImage::setup()
 				pixel_value = pixel_value | (this->file->get() << 8);
 
 			//check if we need to create a new row of pixels (vector_pixel)
-			if(counter % this->width == 0)
+			if(i % this->width == 0)
 			{
 				vector_pixel vector_pixel;
 				this->points.push_back(vector_pixel);
 			}
-			//std::cout << pixel_value << ',';
+			//std::cout << i << ',';
 
-			int index = counter / this->width;
+			int index = i / this->width;
 
 			this->points[index].push_back(pixel_value);
-
-			counter++;
 		}
+	}
+	else
+	{
+		std::cout << "Could not open file <" << this->filename << ">" << std::endl;
 	}
 
 	this->file->close();

@@ -14,7 +14,7 @@ OPCIONES:
 	-h	Imprime este mensaje de ayuda de uso
 	-d	Carpeta donde estan las imagenes a transformar
 	-e	Extension de los archivos a transformar
-	-t	Carpeta destino de imagenes transformadas (default: "pgm)
+	-t	Carpeta destino de imagenes transformadas (default: pgm)
 	-r	Argumento -resize usado por ImageMagick (default: 100%)
 
 EOF

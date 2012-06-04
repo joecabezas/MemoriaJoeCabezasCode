@@ -31,18 +31,16 @@ mpVector Promedio(mp4Vector p1, mp4Vector p2, float value);
 
 int main(int argc, char **argv)
 {
-	/*
-	for (int i = 1; i < argc; ++i)
-	{
-		std::cout << argv[i] << std::endl;
-	}
-	*/
-	//return 0;
-
 	Dataset d;
 
 	for (int i = 1; i < argc; ++i)
 	{
+//		std::cout
+//			<< "Reading <"
+//			<< argv[i]
+//			<< ">"
+//			<< std::endl;
+
 		d.AddImage(argv[i]);
 	}
 
@@ -59,7 +57,7 @@ int main(int argc, char **argv)
 	//return 0;
 
 	int numTriangles;
-	float minval = 65535.0f * 0.4f;
+	float minval = float(0xff) * 0.4f;
 
 	vector_triangles Triangles = MarchingCubesDataset(minval, d, LinearInterp, numTriangles);
 

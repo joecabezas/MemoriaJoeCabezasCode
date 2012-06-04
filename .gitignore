@@ -1,7 +1,7 @@
 # CDT
 .DS_Store
-#.cproject
-#.project
+.cproject
+.project
 
 Debug/
 
