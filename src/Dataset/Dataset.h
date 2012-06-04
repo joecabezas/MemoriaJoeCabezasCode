@@ -17,7 +17,6 @@ typedef std::vector<DatasetImage> vector_dataset_images;
 class Dataset
 {
 	public:
-
 		Dataset();
 		virtual ~Dataset();
 
@@ -33,7 +32,6 @@ class Dataset
 		unsigned int getNumPixelsOnAxis(AXIS);
 
 	private:
-
 		void setup();
 
 		vector_dataset_images images;
