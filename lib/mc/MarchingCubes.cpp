@@ -340,6 +340,22 @@ std::vector< TRIANGLE > MarchingCubesDataset(
 				mpVector intVerts[12];
 
 				/*(step 6)*/
+
+				//arista 0 = vertice 0 -> vertice 1
+				//arista 1 = vertice 1 -> vertice 2
+				//arista 2 = vertice 2 -> vertice 3
+				//arista 3 = vertice 3 -> vertice 0
+
+				//arista 4 = vertice 4 -> vertice 5
+				//arista 5 = vertice 5 -> vertice 6
+				//arista 6 = vertice 6 -> vertice 7
+				//arista 7 = vertice 7 -> vertice 4
+
+				//arista 8 = vertice 0 -> vertice 4
+				//arista 9 = vertice 1 -> vertice 5
+				//arista 10 = vertice 2 -> vertice 6
+				//arista 11 = vertice 3 -> vertice 7
+
 				if(edgeTable[cubeIndex] & 1) intVerts[0] = intersection(verts[0], verts[1], minValue);
 				if(edgeTable[cubeIndex] & 2) intVerts[1] = intersection(verts[1], verts[2], minValue);
 				if(edgeTable[cubeIndex] & 4) intVerts[2] = intersection(verts[2], verts[3], minValue);
@@ -368,6 +384,9 @@ std::vector< TRIANGLE > MarchingCubesDataset(
 					triangles.push_back(t);
 
 					/*(step 8)*/
+
+					//calculo de normales
+
 					//triangles[numTriangles].norm = ((triangles[numTriangles].p[1] -
 					//								triangles[numTriangles].p[0]).Cross(triangles[numTriangles].p[2] -
 					//								triangles[numTriangles].p[0])).Normalize();
@@ -376,15 +395,6 @@ std::vector< TRIANGLE > MarchingCubesDataset(
 				}
 
 			}	//END OF FOR LOOP
-
-		//free all the wasted space
-		//TRIANGLE * retTriangles = new TRIANGLE[numTriangles];
-		//for(int i=0; i < numTriangles; i++)
-		//{
-		//	retTriangles[i] = triangles[i];
-		//}
-
-		//delete [] triangles;
 
 	return triangles;
 }
