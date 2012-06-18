@@ -1,0 +1,10 @@
+Como convertir un TIF multiimagen a un set de imagenes TIF separadas
+	convert imagen.tif salida%d.tif
+	convert entrada.tif salida%05d.tif
+
+Como convertir archivos RAW a un set de imagenes TIF
+	convert -size 256x256x256 -depth 8 gray:skull.raw out%05d.tif
+
+Como convertir un archivo RAW en un set de imagenes PGM
+	convert -size 256x256x256 -depth 8 gray:skull.raw ../pgm/out%05d.pgm
+
