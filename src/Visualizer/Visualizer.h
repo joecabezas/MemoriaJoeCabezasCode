@@ -29,12 +29,12 @@ class Visualizer
 		unsigned int res_x;
 		unsigned int res_y;
 
-		int axis_x = 0;
-		int axis_y = 0;
-		int axis_u = 0;
-		int axis_v = 0;
-		int axis_r = 0;
-		int axis_z = 0;
+		int axis_x;
+		int axis_y;
+		int axis_u;
+		int axis_v;
+		int axis_r;
+		int axis_z;
 };
 
 #endif /* VISUALIZER_H_ */

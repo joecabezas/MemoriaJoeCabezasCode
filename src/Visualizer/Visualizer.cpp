@@ -25,23 +25,23 @@ Visualizer::~Visualizer() {
 
 void Visualizer::setup()
 {
-	//video mode
-	this->video_mode = new sf::VideoMode(this->res_x, this->res_y, 32);
-
-	//window
-	this->app = new sf::Window(
-		this->video_mode,
-		"OpenGL xbox cam [Joe]",
-		sf::Style::Titlebar | sf::Style::Close// | sf::Style::Fullscreen
-	);
-	this->app.SetFramerateLimit(60);
-
-	// Set color and depth clear value
-	//glClearDepth(1.f);
-	glClearColor(0.1f, 0.1f, 0.1f, 0.1f);
-
-	//clock
-	this->clock = new sf::Clock();
+//	//video mode
+//	this->video_mode = new sf::VideoMode(this->res_x, this->res_y, 32);
+//
+//	//window
+//	this->app = new sf::Window(
+//		this->video_mode,
+//		"OpenGL xbox cam [Joe]",
+//		sf::Style::Titlebar | sf::Style::Close// | sf::Style::Fullscreen
+//	);
+//	this->app.SetFramerateLimit(60);
+//
+//	// Set color and depth clear value
+//	//glClearDepth(1.f);
+//	glClearColor(0.1f, 0.1f, 0.1f, 0.1f);
+//
+//	//clock
+//	this->clock = new sf::Clock();
 }
 
 void Visualizer::loop()
@@ -70,7 +70,7 @@ void Visualizer::loop()
 void Visualizer::processInputEvents()
 {
 	//input reference for real time events
-	const sf::Input Input = this->app.GetInput();
+	const sf::Input& Input = this->app.GetInput();
 
 	//axis and dead zones
 	axis_u = Input.GetJoystickAxis(0, sf::Joy::AxisU); if(abs(axis_u) < 15) axis_u = 0;
@@ -84,32 +84,32 @@ void Visualizer::processInputEvents()
 	axis_r = (axis_r + 100) * 0.5f;
 	axis_z = (axis_z + 100) * 0.5f;
 
-	camera_angle_velocity = axis_u * 0.01f * 270;
-
-	//calculo velocidad angular
-	camera_azimut = axis_v * 0.01f * 90.f;
-	camera_angle = camera_angle + camera_angle_velocity * elapsed_time;
-
-	//calculo velocidad
-	// v_x = v_x0 +a_xt
-	camera_velocity[0] = axis_y * 0.01f * sin(camera_angle * 3.14159265/180);
-	camera_velocity[1] = axis_y * -0.01f * cos(camera_angle * 3.14159265/180);
-	camera_velocity[2] = axis_y * -0.01f * sin(camera_azimut * 3.14159265/180);
-
-	//strafe
-	camera_velocity_strafe[0] = axis_x * -0.01f * cos(camera_angle * 3.14159265/180);
-	camera_velocity_strafe[1] = axis_x * -0.01f * sin(camera_angle * 3.14159265/180);
-	camera_velocity_strafe[2] = axis_r * -0.01f - axis_z * -0.01f;
-
-	//calculo posicion
-	//p_x = p_x + v_x * t + 1/2 a_x*t^2
-	camera_position[0] = camera_position[0] + camera_velocity[0] * 5.f * elapsed_time;
-	camera_position[1] = camera_position[1] + camera_velocity[1] * 5.f * elapsed_time;
-	camera_position[2] = camera_position[2] + camera_velocity[2] * 5.f * elapsed_time;
-	//strafe
-	camera_position[0] = camera_position[0] + camera_velocity_strafe[0] * 5.f * elapsed_time;
-	camera_position[1] = camera_position[1] + camera_velocity_strafe[1] * 5.f * elapsed_time;
-	camera_position[2] = camera_position[2] + camera_velocity_strafe[2] * 5.f * elapsed_time;
+//	camera_angle_velocity = axis_u * 0.01f * 270;
+//
+//	//calculo velocidad angular
+//	camera_azimut = axis_v * 0.01f * 90.f;
+//	camera_angle = camera_angle + camera_angle_velocity * elapsed_time;
+//
+//	//calculo velocidad
+//	// v_x = v_x0 +a_xt
+//	camera_velocity[0] = axis_y * 0.01f * sin(camera_angle * 3.14159265/180);
+//	camera_velocity[1] = axis_y * -0.01f * cos(camera_angle * 3.14159265/180);
+//	camera_velocity[2] = axis_y * -0.01f * sin(camera_azimut * 3.14159265/180);
+//
+//	//strafe
+//	camera_velocity_strafe[0] = axis_x * -0.01f * cos(camera_angle * 3.14159265/180);
+//	camera_velocity_strafe[1] = axis_x * -0.01f * sin(camera_angle * 3.14159265/180);
+//	camera_velocity_strafe[2] = axis_r * -0.01f - axis_z * -0.01f;
+//
+//	//calculo posicion
+//	//p_x = p_x + v_x * t + 1/2 a_x*t^2
+//	camera_position[0] = camera_position[0] + camera_velocity[0] * 5.f * elapsed_time;
+//	camera_position[1] = camera_position[1] + camera_velocity[1] * 5.f * elapsed_time;
+//	camera_position[2] = camera_position[2] + camera_velocity[2] * 5.f * elapsed_time;
+//	//strafe
+//	camera_position[0] = camera_position[0] + camera_velocity_strafe[0] * 5.f * elapsed_time;
+//	camera_position[1] = camera_position[1] + camera_velocity_strafe[1] * 5.f * elapsed_time;
+//	camera_position[2] = camera_position[2] + camera_velocity_strafe[2] * 5.f * elapsed_time;
 }
 
 void Visualizer::processStackEvents()
