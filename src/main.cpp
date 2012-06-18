@@ -57,12 +57,13 @@ int main(int argc, char **argv)
 	//return 0;
 
 	int numTriangles;
-	float minval = float(0xff) * 0.4f;
+	float minval = d.getMaxVal() * 0.2f;
+	std::cout << "valor minimo: " << minval << std::endl;
 
+	std::cout << "calculando Marching Cubes" << std::endl;
 	vector_triangles Triangles = MarchingCubesDataset(minval, d, LinearInterp, numTriangles);
 
 	//debug
-	std::cout << "valor minimo: " << minval << std::endl;
 	std::cout << "numero de triangulos: " << numTriangles << std::endl;
 
 	/*

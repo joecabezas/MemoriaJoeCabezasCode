@@ -16,7 +16,7 @@ OPCIONES:
 	-e	Extension de los archivos a transformar
 	-t	Carpeta destino de imagenes transformadas (default: pgm)
 	-r	Argumento -resize usado por ImageMagick (default: 100%)
-
+	-a	Modo sin compresion ASCII de imagemagick (-compress none)
 EOF
 }
 
@@ -25,7 +25,7 @@ EOF
 #	exit
 #fi
 
-while getopts "hd:e:t:r:" opt; do
+while getopts "hd:e:t:r:a" opt; do
 	case $opt in
 		h)
 			usage
@@ -38,6 +38,9 @@ while getopts "hd:e:t:r:" opt; do
 			;;
 		r)
 			RESIZE=$OPTARG
+			;;
+		a)
+			COMPRESS="-compress none"
 			;;
 	esac
 done
@@ -52,7 +55,7 @@ if [ -z "$TARGET_DIR" ]; then TARGET_DIR="pgm"; fi
 #EXECUTION#
 ###########
 
-ARGUMENTS="-verbose -resize $RESIZE"
+ARGUMENTS="-verbose -resize $RESIZE $COMPRESS"
 
 #Go to base dir
 cd "$BASE_DIR"

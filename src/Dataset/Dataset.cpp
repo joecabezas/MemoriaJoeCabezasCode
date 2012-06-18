@@ -72,3 +72,15 @@ unsigned int Dataset::getNumPixelsOnAxis(AXIS a)
 
 	return number;
 }
+
+unsigned int Dataset::getMaxVal()
+{
+	unsigned int max = 0;
+
+	for(vector_dataset_images::iterator it = this->images.begin(); it != this->images.end(); ++it) {
+		if(it->getMaxVal() > max)
+			max = it->getMaxVal();
+	}
+
+	return max;
+}

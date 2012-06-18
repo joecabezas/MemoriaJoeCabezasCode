@@ -31,6 +31,8 @@ class Dataset
 
 		unsigned int getNumPixelsOnAxis(AXIS);
 
+		unsigned int getMaxVal();
+
 	private:
 		void setup();
 

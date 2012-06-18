@@ -32,6 +32,7 @@ class DatasetImage
 
 		std::size_t getWidth();
 		std::size_t getHeight();
+		std::size_t getMaxVal();
 
 	private:
 

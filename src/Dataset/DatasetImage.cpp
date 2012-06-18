@@ -47,8 +47,15 @@ void DatasetImage::setup()
 		//ignore header type
 		*(this->file) >> s;
 
-		//read width
+		//now comes the comments section, ignore them all
 		*(this->file) >> s;
+		while(s[0] == '#')
+		{
+			//std::cout << "comentario" << std::endl;
+			*(this->file) >> s;
+		}
+
+		//read width
 		this->width = std::atoi(s.c_str());
 		//std::cout << this->width << std::endl;
 
@@ -71,7 +78,7 @@ void DatasetImage::setup()
 			this->is_16_bit = true;
 		}
 
-		if(this->maxval == 0xff)
+		//if(this->maxval == 0xff)
 			//std::cout << "is a 8bit file" << std::endl;
 
 		//ignore next separator (0x0A)
@@ -125,4 +132,10 @@ std::size_t DatasetImage::getWidth()
 std::size_t DatasetImage::getHeight()
 {
 	return this->height;
+}
+
+
+std::size_t DatasetImage::getMaxVal()
+{
+	return this->maxval;
 }
