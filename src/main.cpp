@@ -23,6 +23,7 @@
 #include "../lib/mc/MarchingCubes.h"
 #include "Dataset/Dataset.h"
 #include "../lib/filehandlers/OffFile.h"
+#include "Visualizer/Visualizer.h"
 
 #define MINVAL 1
 #define D 1
@@ -31,6 +32,12 @@ mpVector Promedio(mp4Vector p1, mp4Vector p2, float value);
 
 int main(int argc, char **argv)
 {
+	//create the visualizer
+	Visualizer v;
+
+	return 0;
+
+	//create a dataset holder
 	Dataset d;
 
 	for (int i = 1; i < argc; ++i)
@@ -44,18 +51,6 @@ int main(int argc, char **argv)
 		d.AddImage(argv[i]);
 	}
 
-	/*
-	std::cout << d.getPixelValueAt(0,0,0) << std::endl;
-	std::cout << d.getPixelValueAt(0,1,0) << std::endl;
-	std::cout << d.getPixelValueAt(0,2,0) << std::endl;
-
-	std::cout << d.getPixelValueAt(0,0,1) << std::endl;
-	std::cout << d.getPixelValueAt(0,1,1) << std::endl;
-	std::cout << d.getPixelValueAt(0,2,1) << std::endl;
-	*/
-
-	//return 0;
-
 	int numTriangles;
 	float minval = d.getMaxVal() * 0.2f;
 	std::cout << "valor minimo: " << minval << std::endl;
@@ -66,15 +61,6 @@ int main(int argc, char **argv)
 	//debug
 	std::cout << "numero de triangulos: " << numTriangles << std::endl;
 
-	/*
-	for(int i=0; i<numTriangles; i++){
-		std::cout << "triangulo " << i << ":" << std::endl;
-		for(int j=0; j<3; j++){
-			std::cout << "vertice " << j << ": (" << Triangles[i].p[j].x << "," << Triangles[i].p[j].y << "," << Triangles[i].p[j].z << ")" << std::endl;
-		}
-	}
-	*/
-	
 	OffFile* f = new OffFile(Triangles, numTriangles);
 	f->createOff();
 
