@@ -20,9 +20,9 @@
 
 #include <math.h>
 
-#include "../lib/mc/MarchingCubes.h"
+#include "mc/MarchingCubes.h"
 #include "Dataset/Dataset.h"
-#include "../lib/filehandlers/OffFile.h"
+#include "filehandlers/OffFile.h"
 #include "Visualizer/Visualizer.h"
 
 #define MINVAL 1
@@ -33,9 +33,10 @@ mpVector Promedio(mp4Vector p1, mp4Vector p2, float value);
 int main(int argc, char **argv)
 {
 	//create the visualizer
-	Visualizer v;
+	Visualizer visualizer(0.7f, 0.7f);
 
-	return 0;
+	//launch visualizer thread
+	visualizer.Launch();
 
 	//create a dataset holder
 	Dataset d;
@@ -48,8 +49,15 @@ int main(int argc, char **argv)
 //			<< ">"
 //			<< std::endl;
 
+		std::string s = argv[i];
+		visualizer.updateHudStatus("Reading: " + s);
 		d.AddImage(argv[i]);
 	}
+	visualizer.updateHudStatus("File Reading: Done");
+
+	//TODO: REMEMBER TO DELETE THIS WHILE!
+	while(true){}
+	return 0;
 
 	int numTriangles;
 	float minval = d.getMaxVal() * 0.2f;

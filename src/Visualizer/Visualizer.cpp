@@ -5,17 +5,23 @@
  *      Author: joe
  */
 
+#include <iostream>
+
 #include "Visualizer.h"
 
 Visualizer::Visualizer(
-	unsigned int percentual_width = 75,
-	unsigned int percentual_height = 75
+	float percentual_width,
+	float percentual_height
 )
 {
 	this->res_x = sf::VideoMode::GetMode(0).Width * percentual_width;
-	this->res_y = sf::VideoMode::GetMode(0).Width * percentual_height;
+	this->res_y = sf::VideoMode::GetMode(0).Height * percentual_height;
 
 	this->setup();
+}
+
+void Visualizer::Run()
+{
 	this->loop();
 }
 
@@ -26,17 +32,16 @@ Visualizer::~Visualizer() {
 void Visualizer::setup()
 {
 	//video mode
-	sf::VideoMode vm(this->res_x, this->res_y, 32);
-	this->video_mode = vm;
+	this->video_mode = new sf::VideoMode(this->res_x, this->res_y, 32);
 
 	//window
-	 sf::Window app(
-		this->video_mode,
+	this->app = new sf::RenderWindow(
+		*(this->video_mode),
 		"OpenGL xbox cam [Joe]",
 		sf::Style::Titlebar | sf::Style::Close// | sf::Style::Fullscreen
 	);
-	*(this->app) = &app;
-	this->app.SetFramerateLimit(60);
+
+	this->app->SetFramerateLimit(60);
 
 	// Set color and depth clear value
 	//glClearDepth(1.f);
@@ -44,16 +49,24 @@ void Visualizer::setup()
 
 	//clock
 	this->clock = new sf::Clock();
+
+	//hud
+	this->hud_status_string = "";
+	this->hud_status = new sf::String();
+
+	//threads
+	//this->thread_window = new sf::Thread(&loop);
+	//sf::Thread ttt(&loop);
 }
 
 void Visualizer::loop()
 {
 	float elapsed_time = 0;
 
-	while (this->app.IsOpened())
+	while (this->app->IsOpened())
 	{
-		elapsed_time = this->clock.GetElapsedTime();
-		this->clock.Reset();
+		elapsed_time = this->clock->GetElapsedTime();
+		this->clock->Reset();
 
 		this->processInputEvents();
 		this->processStackEvents();
@@ -61,18 +74,30 @@ void Visualizer::loop()
 		// Set the active window before using OpenGL commands
 		// It's useless here because active window is always the same,
 		// but don't forget it if you use multiple windows or controls
-		this->app.SetActive();
+		this->app->SetActive();
 
 		//modelview
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
+
+		//clear 2d graphics
+		this->app->Clear();
+
+		//draw 3d model
+		this->draw3dModel();
+
+		//draw Hud (User Interface)
+		this->drawHud();
+
+		// Finally, display rendered frame on screen
+		this->app->Display();
 	}
 }
 
 void Visualizer::processInputEvents()
 {
 	//input reference for real time events
-	const sf::Input& Input = this->app.GetInput();
+	const sf::Input& Input = this->app->GetInput();
 
 	//axis and dead zones
 	axis_u = Input.GetJoystickAxis(0, sf::Joy::AxisU); if(abs(axis_u) < 15) axis_u = 0;
@@ -117,17 +142,17 @@ void Visualizer::processInputEvents()
 void Visualizer::processStackEvents()
 {
 	sf::Event Event;
-	while (this->app.GetEvent(Event))
+	while (this->app->GetEvent(Event))
 	{
 		switch(Event.Type)
 		{
 			case sf::Event::Closed:
-				this->app.Close();
+				this->app->Close();
 				break;
 
 			case sf::Event::KeyPressed:
 				if(Event.Key.Code == sf::Key::Escape)
-					this->app.Close();
+					this->app->Close();
 				break;
 
 			case sf::Event::Resized:
@@ -138,4 +163,28 @@ void Visualizer::processStackEvents()
 				break;
 		}
 	}
+}
+
+void Visualizer::draw3dModel()
+{
+}
+
+void Visualizer::drawHud()
+{
+	this->drawHudStatus();
+}
+
+void Visualizer::updateHudStatus(std::string status)
+{
+	this->hud_status_string = status;
+}
+
+void Visualizer::drawHudStatus()
+{
+	this->hud_status->SetText(this->hud_status_string);
+	this->hud_status->SetFont(sf::Font::GetDefaultFont());
+	this->hud_status->SetSize(20);
+
+	this->app->Draw(*(this->hud_status));
+
 }
