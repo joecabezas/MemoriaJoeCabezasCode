@@ -4,6 +4,7 @@
 .project
 
 Debug/
+Release/
 
 #outputs
 *.off
