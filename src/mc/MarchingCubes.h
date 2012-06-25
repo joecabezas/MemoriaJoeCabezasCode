@@ -123,12 +123,12 @@ TRIANGLE* MarchingCubesLinear(
 );
 
 //JOE
-std::vector< TRIANGLE >* MarchingCubesDataset(
+std::vector< TRIANGLE > MarchingCubesDataset(
 	float minValue,
 	Dataset dataset,
 
 	INTERSECTION intersection,
-	int &numTriangles
+	unsigned int &numTriangles
 );
 
 #endif

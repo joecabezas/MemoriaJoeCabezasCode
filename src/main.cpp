@@ -22,6 +22,7 @@
 
 #include "mc/MarchingCubes.h"
 #include "Dataset/Dataset.h"
+#include "MarchingCubesThread/MarchingCubesThread.h"
 #include "filehandlers/OffFile.h"
 #include "Visualizer/Visualizer.h"
 #include "utils/StringUtils.h"
@@ -36,36 +37,28 @@ int main(int argc, char **argv)
 	//create the visualizer
 	Visualizer visualizer(0.7f, 0.7f);
 
+	//create the thread that calculates the marching cubes
+	MarchingCubesThread mc_thread;
+
+	//let marchingcubes_thread creates it's dataset
+	mc_thread.readFilesFromStandardInput(argc, argv);
+
+	//set mc_thread pointer to visualizer
+	visualizer.setMarchingCubesThread(&mc_thread);
+
 	//launch visualizer thread
-	visualizer.loop();
+	visualizer.run();
 
 	//TODO: REMEMBER TO DELETE THIS WHILE!
 	//while(true){}
 	return 0;
 
-	//create a dataset holder
-	Dataset d;
-
-	for (int i = 1; i < argc; ++i)
-	{
-//		std::cout
-//			<< "Reading <"
-//			<< argv[i]
-//			<< ">"
-//			<< std::endl;
-
-		std::string s = argv[i];
-		visualizer.updateHudStatus("Reading: " + s);
-		d.AddImage(argv[i]);
-	}
-	visualizer.updateHudStatus("File Reading: Done");
-
 	int numTriangles;
-	float minval = d.getMaxVal() * 0.2f;
-	visualizer.updateHudStatus("Valor Minimo: " + stringify(minval));
+	//float minval = d.getMaxVal() * 0.2f;
+	//visualizer.updateHudStatus("Valor Minimo: " + stringify(minval));
 
 	visualizer.updateHudStatus("Calculando Marching Cubes...");
-	vector_triangles *triangles = MarchingCubesDataset(minval, d, LinearInterp, numTriangles);
+	//vector_triangles *triangles = MarchingCubesDataset(minval, d, LinearInterp, numTriangles);
 
 	//debug
 	visualizer.updateHudStatus("numero de triangulos: " + stringify(numTriangles));
@@ -73,8 +66,8 @@ int main(int argc, char **argv)
 	//destroy triangles
 	//triangles->clear();
 
-	OffFile* f = new OffFile(*triangles, numTriangles);
-	f->createOff();
+	//OffFile* f = new OffFile(*triangles, numTriangles);
+	//f->createOff();
 
 	return 0;
 }

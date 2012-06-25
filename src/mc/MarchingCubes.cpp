@@ -263,12 +263,12 @@ TRIANGLE* MarchingCubesLinear(float mcMinX, float mcMaxX, float mcMinY, float mc
 }
 
 //JOE
-std::vector< TRIANGLE >* MarchingCubesDataset(
+std::vector< TRIANGLE > MarchingCubesDataset(
 	float minValue,
 	Dataset dataset,
 
 	INTERSECTION intersection,
-	int &numTriangles
+	unsigned int &numTriangles
 )
 {
 
@@ -381,22 +381,25 @@ std::vector< TRIANGLE >* MarchingCubesDataset(
 					t.p[1] = intVerts[triTable[cubeIndex][n+1]];
 					t.p[2] = intVerts[triTable[cubeIndex][n]];
 
-					//std::cout << "exc 0" << std::endl;
-					triangles.push_back(t);
-					//std::cout << "exc 1" << std::endl;
-
 					/*(step 8)*/
-
 					//calculo de normales
+					t.norm =
+					(
+						(t.p[1] - t.p[0]).Cross(t.p[2] - t.p[0])
+					).Normalize();
 
-					//triangles[numTriangles].norm = ((triangles[numTriangles].p[1] -
-					//								triangles[numTriangles].p[0]).Cross(triangles[numTriangles].p[2] -
-					//								triangles[numTriangles].p[0])).Normalize();
+					triangles.push_back(t);
 
 					numTriangles++;
 				}
 
 			}	//END OF FOR LOOP
 
-	return &triangles;
+	std::cout << "MarchingCubesDataset" << std::endl;
+
+	std::cout << triangles[0].p[0].x << std::endl;
+	std::cout << triangles[0].p[0].y << std::endl;
+	std::cout << triangles[0].p[0].z << std::endl;
+
+	return triangles;
 }

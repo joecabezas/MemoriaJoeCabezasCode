@@ -13,6 +13,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "../mc/MarchingCubes.h"
+#include "../MarchingCubesThread/MarchingCubesThread.h"
 
 class Visualizer
 {
@@ -26,10 +27,13 @@ class Visualizer
 		//model
 		void setTriangles(vector_triangles);
 
-		void loop();
+		void setMarchingCubesThread(MarchingCubesThread*);
+
+		void run();
 
 	private:
 		void setup();
+		void loop();
 		void processInputEvents(const float);
 		void processStackEvents(float);
 
@@ -50,8 +54,11 @@ class Visualizer
 		sf::RenderWindow* app;
 		sf::Clock* clock;
 
-		//sf::Thread* thread_window;
-		//sf::Thread* thread_marching_cubes;
+		MarchingCubesThread* mc_thread;
+
+		//array of triangles
+		std::vector< GLfloat >* vertexes;
+		GLfloat* vertexes_cache;
 
 		unsigned int res_x;
 		unsigned int res_y;
@@ -70,8 +77,8 @@ class Visualizer
 		GLfloat camera_azimut;
 		GLfloat camera_velocity_strafe[3];
 
-		//overrides
-		//virtual void Run();
+		//flags
+		bool flag_is_model_valid;
 };
 
 #endif /* VISUALIZER_H_ */
