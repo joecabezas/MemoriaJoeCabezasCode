@@ -263,7 +263,7 @@ TRIANGLE* MarchingCubesLinear(float mcMinX, float mcMaxX, float mcMinY, float mc
 }
 
 //JOE
-std::vector< TRIANGLE > MarchingCubesDataset(
+std::vector< TRIANGLE >* MarchingCubesDataset(
 	float minValue,
 	Dataset dataset,
 
@@ -381,7 +381,9 @@ std::vector< TRIANGLE > MarchingCubesDataset(
 					t.p[1] = intVerts[triTable[cubeIndex][n+1]];
 					t.p[2] = intVerts[triTable[cubeIndex][n]];
 
+					//std::cout << "exc 0" << std::endl;
 					triangles.push_back(t);
+					//std::cout << "exc 1" << std::endl;
 
 					/*(step 8)*/
 
@@ -396,5 +398,5 @@ std::vector< TRIANGLE > MarchingCubesDataset(
 
 			}	//END OF FOR LOOP
 
-	return triangles;
+	return &triangles;
 }

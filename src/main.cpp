@@ -24,6 +24,7 @@
 #include "Dataset/Dataset.h"
 #include "filehandlers/OffFile.h"
 #include "Visualizer/Visualizer.h"
+#include "utils/StringUtils.h"
 
 #define MINVAL 1
 #define D 1
@@ -36,7 +37,11 @@ int main(int argc, char **argv)
 	Visualizer visualizer(0.7f, 0.7f);
 
 	//launch visualizer thread
-	visualizer.Launch();
+	visualizer.loop();
+
+	//TODO: REMEMBER TO DELETE THIS WHILE!
+	//while(true){}
+	return 0;
 
 	//create a dataset holder
 	Dataset d;
@@ -55,21 +60,20 @@ int main(int argc, char **argv)
 	}
 	visualizer.updateHudStatus("File Reading: Done");
 
-	//TODO: REMEMBER TO DELETE THIS WHILE!
-	while(true){}
-	return 0;
-
 	int numTriangles;
 	float minval = d.getMaxVal() * 0.2f;
-	std::cout << "valor minimo: " << minval << std::endl;
+	visualizer.updateHudStatus("Valor Minimo: " + stringify(minval));
 
-	std::cout << "calculando Marching Cubes" << std::endl;
-	vector_triangles Triangles = MarchingCubesDataset(minval, d, LinearInterp, numTriangles);
+	visualizer.updateHudStatus("Calculando Marching Cubes...");
+	vector_triangles *triangles = MarchingCubesDataset(minval, d, LinearInterp, numTriangles);
 
 	//debug
-	std::cout << "numero de triangulos: " << numTriangles << std::endl;
+	visualizer.updateHudStatus("numero de triangulos: " + stringify(numTriangles));
 
-	OffFile* f = new OffFile(Triangles, numTriangles);
+	//destroy triangles
+	//triangles->clear();
+
+	OffFile* f = new OffFile(*triangles, numTriangles);
 	f->createOff();
 
 	return 0;

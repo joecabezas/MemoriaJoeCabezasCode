@@ -8,9 +8,13 @@
 #ifndef VISUALIZER_H_
 #define VISUALIZER_H_
 
+#include <iostream>
+
 #include <SFML/Graphics.hpp>
 
-class Visualizer : public sf::Thread
+#include "../mc/MarchingCubes.h"
+
+class Visualizer
 {
 	public:
 		Visualizer(float, float);
@@ -19,12 +23,19 @@ class Visualizer : public sf::Thread
 		//hud
 		void updateHudStatus(std::string);
 
+		//model
+		void setTriangles(vector_triangles);
+
+		void loop();
+
 	private:
 		void setup();
-		void loop();
-		void processInputEvents();
-		void processStackEvents();
+		void processInputEvents(const float);
+		void processStackEvents(float);
 
+		void draw3dScene();
+		void draw3dAxis();
+		void draw3dGrid(int, int, int, int, int, int);
 		void draw3dModel();
 
 		//hud
@@ -52,8 +63,15 @@ class Visualizer : public sf::Thread
 		int axis_r;
 		int axis_z;
 
+		GLfloat camera_position[3];
+		GLfloat camera_velocity[3];
+		GLfloat camera_angle;
+		GLfloat camera_angle_velocity;
+		GLfloat camera_azimut;
+		GLfloat camera_velocity_strafe[3];
+
 		//overrides
-		virtual void Run();
+		//virtual void Run();
 };
 
 #endif /* VISUALIZER_H_ */
