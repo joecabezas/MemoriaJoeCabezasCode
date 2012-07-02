@@ -22,11 +22,6 @@ Visualizer::~Visualizer() {
 	// TODO Auto-generated destructor stub
 }
 
-void Visualizer::run()
-{
-	this->loop();
-}
-
 void Visualizer::setMarchingCubesThread(MarchingCubesThread* mc_thread)
 {
 	this->mc_thread = mc_thread;
@@ -34,6 +29,8 @@ void Visualizer::setMarchingCubesThread(MarchingCubesThread* mc_thread)
 
 void Visualizer::setup()
 {
+	min_value = 0.2f;
+
 	//initial camera values
 	camera_position[0] = -5.f;
 	camera_position[1] = -5.f;
@@ -117,7 +114,7 @@ void Visualizer::loop()
 		if(!this->flag_is_model_valid)
 		{
 			this->updateHudStatus("Generating Marching Cubes...");
-			this->vertexes = this->mc_thread->getTriangles(0.2f);
+			this->vertexes = this->mc_thread->getTriangles(min_value);
 			this->updateHudStatus("Marching Cubes Done");
 
 //			for(unsigned int i=0; i < 3; i++)
@@ -216,6 +213,32 @@ void Visualizer::processInputEvents(const float elapsed_time)
 	axis_y = Input.GetJoystickAxis(0, sf::Joy::AxisY); if(abs(axis_y) < 15) axis_y = 0;
 	axis_r = Input.GetJoystickAxis(0, sf::Joy::AxisR); if(abs(axis_r) < 15) axis_r = 0;
 	axis_z = Input.GetJoystickAxis(0, sf::Joy::AxisZ); if(abs(axis_z) < 15) axis_z = 0;
+
+//	for(unsigned int i=0; i < 20; i++)
+//		if(Input.IsJoystickButtonDown(0, i))
+//			std::cout << i << std::endl;
+
+	//BACK BUTTON (SELECT)
+	if(Input.IsJoystickButtonDown(0, 6))
+	{
+		min_value -= 0.01f;
+		std::cout << "min_value = " << min_value << std::endl;
+	}
+
+	//START BUTTON
+	if(Input.IsJoystickButtonDown(0, 7))
+	{
+		min_value += 0.01f;
+		std::cout << "min_value = " << min_value << std::endl;
+	}
+
+	//A BUTTON
+	if(Input.IsJoystickButtonDown(0, 0)) this->flag_is_model_valid = false;
+
+
+	//limit min_value to a valid percentual value
+	if(min_value < 0.0f) min_value = 0.0f;
+	if(min_value > 1.0f) min_value = 1.0f;
 
 	if(Input.IsKeyDown(sf::Key::A)) axis_x = -100;
 	if(Input.IsKeyDown(sf::Key::D)) axis_x = 100;
@@ -453,9 +476,4 @@ void Visualizer::drawHudStatus()
 	this->hud_status->SetSize(20);
 
 	this->app->Draw(*(this->hud_status));
-}
-
-void Visualizer::setTriangles(vector_triangles)
-{
-
 }

@@ -19,7 +19,7 @@ MarchingCubesThread::~MarchingCubesThread()
 
 void MarchingCubesThread::Run()
 {
-
+	while(true);
 }
 
 void MarchingCubesThread::setup()
@@ -34,6 +34,8 @@ void MarchingCubesThread::readFilesFromStandardInput(int argc, char **argv)
 
 	for (int i = 1; i < argc; ++i)
 	{
+		std::cout << "argv[" << i << "]" << argv[i] << std::endl;
+
 		this->dataset->AddImage(argv[i]);
 	}
 }
@@ -80,9 +82,10 @@ void MarchingCubesThread::generateTriangles(float minvalue_scale)
 	this->triangles.clear();
 	this->triangles = MarchingCubesDataset(this->dataset->getMaxVal() * minvalue_scale, *(this->dataset), LinearInterp, this->num_triangles);
 
-	std::cout << "MarchingCubesThread::generateTriangles = " << this->num_triangles << std::endl;
+	std::cout << "Number of Triangles = " << this->num_triangles << std::endl;
+	std::cout << "Minvalue_scale = " << minvalue_scale << std::endl;
 
-	std::cout << this->triangles[0].p[0].x << std::endl;
-	std::cout << this->triangles[0].p[0].y << std::endl;
-	std::cout << this->triangles[0].p[0].z << std::endl;
+//	std::cout << this->triangles[0].p[0].x << std::endl;
+//	std::cout << this->triangles[0].p[0].y << std::endl;
+//	std::cout << this->triangles[0].p[0].z << std::endl;
 }

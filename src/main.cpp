@@ -47,7 +47,7 @@ int main(int argc, char **argv)
 	visualizer.setMarchingCubesThread(&mc_thread);
 
 	//launch visualizer thread
-	visualizer.run();
+	visualizer.loop();
 
 	//TODO: REMEMBER TO DELETE THIS WHILE!
 	//while(true){}

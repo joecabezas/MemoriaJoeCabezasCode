@@ -24,16 +24,12 @@ class Visualizer
 		//hud
 		void updateHudStatus(std::string);
 
-		//model
-		void setTriangles(vector_triangles);
-
 		void setMarchingCubesThread(MarchingCubesThread*);
 
-		void run();
+		void loop();
 
 	private:
 		void setup();
-		void loop();
 		void processInputEvents(const float);
 		void processStackEvents(float);
 
@@ -61,6 +57,8 @@ class Visualizer
 		//array of triangles
 		std::vector< GLfloat >* vertexes;
 		GLfloat* vertexes_cache;
+
+		float min_value;
 
 		unsigned int res_x;
 		unsigned int res_y;
