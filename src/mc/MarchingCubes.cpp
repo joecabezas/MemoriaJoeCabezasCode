@@ -370,7 +370,7 @@ std::vector< TRIANGLE > MarchingCubesDataset(
 				if(edgeTable[cubeIndex] & 2048) intVerts[11] = intersection(verts[3], verts[7], minValue);
 
 				//now build the triangles using triTable
-				for (int n=0; triTable[cubeIndex][n] != -1; n+=3)
+				for(int n=0; triTable[cubeIndex][n] != -1; n+=3)
 				{
 					/*(step 7)*/
 					//triangles[numTriangles].p[0] = intVerts[triTable[cubeIndex][n+2]];
@@ -392,14 +392,7 @@ std::vector< TRIANGLE > MarchingCubesDataset(
 
 					numTriangles++;
 				}
-
 			}	//END OF FOR LOOP
-
-	std::cout << "MarchingCubesDataset" << std::endl;
-
-	std::cout << triangles[0].p[0].x << std::endl;
-	std::cout << triangles[0].p[0].y << std::endl;
-	std::cout << triangles[0].p[0].z << std::endl;
 
 	return triangles;
 }
