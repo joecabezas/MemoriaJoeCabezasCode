@@ -37,9 +37,11 @@ class Visualizer
 		void processInputEvents(const float);
 		void processStackEvents(float);
 
+		void draw3dLights();
 		void draw3dScene();
 		void draw3dAxis();
-		void draw3dGrid(int, int, int, int, int, int);
+		void draw3dGrid();
+		void draw3dPoints(int, int, int, int, int, int);
 		void draw3dModel();
 
 		//hud

@@ -64,6 +64,10 @@ std::vector< GLfloat >* MarchingCubesThread::getTriangles(float minvalue_scale)
 			this->vertexes.push_back(this->triangles[i].p[j].x);
 			this->vertexes.push_back(this->triangles[i].p[j].y);
 			this->vertexes.push_back(this->triangles[i].p[j].z);
+
+			this->vertexes.push_back(this->triangles[i].norm.x);
+			this->vertexes.push_back(this->triangles[i].norm.y);
+			this->vertexes.push_back(this->triangles[i].norm.z);
 		}
 	}
 

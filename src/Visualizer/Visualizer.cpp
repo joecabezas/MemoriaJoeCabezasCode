@@ -54,19 +54,6 @@ void Visualizer::setup()
 	//set initial flags
 	this->flag_is_model_valid = false;
 
-	// Set color and depth clear value
-	//glClearDepth(1.f);
-	glClearColor(0.1f, 0.1f, 0.1f, 0.1f);
-
-	glEnable(GL_COLOR_MATERIAL);
-	glEnable(GL_LIGHTING); //Enable lighting
-	glEnable(GL_LIGHT0); //Enable light #0
-	glEnable(GL_LIGHT1); //Enable light #1
-
-	// track material ambient and diffuse from surface color, call it before glEnable(GL_COLOR_MATERIAL)
-	//glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
-	//glEnable(GL_COLOR_MATERIAL);
-
 	//clock
 	this->clock = new sf::Clock();
 
@@ -85,6 +72,39 @@ void Visualizer::setup()
 	);
 
 	this->app->SetFramerateLimit(60);
+
+	// Set color and depth clear value
+	glClearDepth(1.f);
+	glClearColor(0.f, 0.f, 0.f, 0.f);
+
+	// Enable Z-buffer read and write
+	//glEnable(GL_DEPTH_TEST);
+	//glDepthMask(GL_TRUE);
+	//glDepthRange(0.0f, 1.0f);
+
+	// track material ambient and diffuse from surface color, call it before glEnable(GL_COLOR_MATERIAL)
+	//glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+//	glEnable(GL_LIGHTING); //Enable lighting //*
+//	glEnable(GL_LIGHT0); //Enable light #0
+	//glEnable(GL_NORMALIZE); //Automatically normalize normals
+	//glShadeModel(GL_SMOOTH); //Enable smooth shading
+
+		//glEnable(GL_DEPTH_TEST);
+		//glShadeModel(GL_SMOOTH);
+		glEnable(GL_COLOR_MATERIAL);
+		glEnable(GL_LIGHTING);
+		glEnable(GL_LIGHT0);
+		glEnable(GL_NORMALIZE);
+
+		// Set material properties which will be assigned by glColor
+//		GLfloat color[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+//		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, color);
+//		GLfloat specReflection[] = { 0.8f, 0.8f, 0.8f, 1.0f };
+//		glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specReflection);
+//		GLfloat shininess[] = { 16.0f };
+//		glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
+
+	this->draw3dLights();
 }
 
 void Visualizer::loop()
@@ -100,10 +120,10 @@ void Visualizer::loop()
 			this->vertexes = this->mc_thread->getTriangles(0.2f);
 			this->updateHudStatus("Marching Cubes Done");
 
-			for(unsigned int i=0; i < 3; i++)
-			{
-				//printf("vertice %d: %f\n", i, *(this->vertexes)[i]);
-			}
+//			for(unsigned int i=0; i < 3; i++)
+//			{
+//				printf("vertice %d: %f\n", i, *(this->vertexes)[i]);
+//			}
 
 			this->vertexes_cache = this->vertexes->data();
 
@@ -131,39 +151,35 @@ void Visualizer::loop()
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 
-		//LIGHT
-		GLfloat ambientColor[] = {0.5f, 0.2f, 0.2f, 1.0f}; //Color (0.2, 0.2, 0.2)
-		glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientColor);
-
-		//Add positioned light
-		GLfloat lightColor0[] = {0.5f, 0.5f, 0.5f, 1.0f}; //Color (0.5, 0.5, 0.5)
-		GLfloat lightPos0[] = {4.0f, 0.0f, 8.0f, 1.0f}; //Positioned at (4, 0, 8)
-		glLightfv(GL_LIGHT0, GL_DIFFUSE, lightColor0);
-		glLightfv(GL_LIGHT0, GL_POSITION, lightPos0);
-
-		//Add directed light
-		GLfloat lightColor1[] = {0.5f, 0.2f, 0.2f, 1.0f}; //Color (0.5, 0.2, 0.2)
-		//Coming from the direction (-1, 0.5, 0.5)
-		GLfloat lightPos1[] = {-1.0f, 0.5f, 0.5f, 0.0f};
-		glLightfv(GL_LIGHT1, GL_DIFFUSE, lightColor1);
-		glLightfv(GL_LIGHT1, GL_POSITION, lightPos1);
-
-		//draw using vertex arrays
-//		glEnableClientState(GL_VERTEX_ARRAY);
-//			glVertexPointer(3, GL_INT, 0, vertices);
-//			glBegin(GL_QUAD_STRIP);
-//				for (unsigned int i = 0; i < 8; i++)
-//				{
-//					glArrayElement(i);
-//				}
-//			glEnd();
-//		glDisableClientState(GL_VERTEX_ARRAY);  // disable vertex arrays
-
 		//draw 3d Scene
 		this->draw3dScene();
 
 		//draw 3d model
 		this->draw3dModel();
+
+			glBegin(GL_TRIANGLES);
+
+				//Front
+				glNormal3f(0.0f, 0.0f, 1.0f);
+				glVertex3f(0.0f, 0.0f, 0.0f);
+
+				glNormal3f(0.0f, 0.0f, 1.0f);
+				glVertex3f(0.0f, 1.0f, 0.0f);
+
+				glNormal3f(0.0f, 0.0f, 1.0f);
+				glVertex3f(1.0f, 0.0f, 0.0f);
+
+				//Right
+				glNormal3f(1.0f, 1.0f, 0.0f);
+				glVertex3f(0.0f, 1.0f, 0.0f);
+
+				glNormal3f(1.0f, 1.0f, 0.0f);
+				glVertex3f(0.0f, 1.0f, 1.0f);
+
+				glNormal3f(1.0f, 1.0f, 0.0f);
+				glVertex3f(1.0f, 0.0f, 0.0f);
+
+			glEnd();
 
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
@@ -200,6 +216,18 @@ void Visualizer::processInputEvents(const float elapsed_time)
 	axis_y = Input.GetJoystickAxis(0, sf::Joy::AxisY); if(abs(axis_y) < 15) axis_y = 0;
 	axis_r = Input.GetJoystickAxis(0, sf::Joy::AxisR); if(abs(axis_r) < 15) axis_r = 0;
 	axis_z = Input.GetJoystickAxis(0, sf::Joy::AxisZ); if(abs(axis_z) < 15) axis_z = 0;
+
+	if(Input.IsKeyDown(sf::Key::A)) axis_x = -100;
+	if(Input.IsKeyDown(sf::Key::D)) axis_x = 100;
+
+	if(Input.IsKeyDown(sf::Key::W)) axis_y = -100;
+	if(Input.IsKeyDown(sf::Key::S)) axis_y = 100;
+
+	if(Input.IsKeyDown(sf::Key::Left)) axis_u = -60;
+	if(Input.IsKeyDown(sf::Key::Right)) axis_u = 60;
+
+	if(Input.IsKeyDown(sf::Key::Up)) axis_r = 100;
+	if(Input.IsKeyDown(sf::Key::Down)) axis_z = 100;
 
 	//escala a eje R y Z
 	axis_r = (axis_r + 100) * 0.5f;
@@ -245,8 +273,17 @@ void Visualizer::processStackEvents(float elapsed_time)
 				break;
 
 			case sf::Event::KeyPressed:
-				if(Event.Key.Code == sf::Key::Escape)
-					this->app->Close();
+
+				switch(Event.Key.Code)
+				{
+					case sf::Key::Escape:
+						this->app->Close();
+						break;
+
+					default:
+						break;
+				}
+
 				break;
 
 			case sf::Event::Resized:
@@ -261,29 +298,50 @@ void Visualizer::processStackEvents(float elapsed_time)
 
 void Visualizer::draw3dModel()
 {
-	//glEnableClientState(GL_NORMAL_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
 	//glEnableClientState(GL_COLOR_ARRAY);
 	glEnableClientState(GL_VERTEX_ARRAY);
-	//glNormalPointer(GL_FLOAT, 0, normals1);
+
+	glNormalPointer(GL_FLOAT, 6 * sizeof(GLfloat), this->vertexes_cache + 3);
 	//glColorPointer(3, GL_FLOAT, 0, colors1);
-	glVertexPointer(3, GL_FLOAT, 0, this->vertexes_cache);
+	glVertexPointer(3, GL_FLOAT, 6 * sizeof(GLfloat), this->vertexes_cache);
 
 	//std::cout << "this->vertexes->size()" << this->vertexes->size() << std::endl;
 
 	glPushMatrix();
+
 		glScalef(0.05f, 0.05f, 0.05f);
+		glColor3f(1,1,1);
+
 		glDrawArrays(GL_TRIANGLES, 0, this->vertexes->size());
+
 	glPopMatrix();
 
 	glDisableClientState(GL_VERTEX_ARRAY);  // disable vertex arrays
 	//glDisableClientState(GL_COLOR_ARRAY);
-	//glDisableClientState(GL_NORMAL_ARRAY);
+	glDisableClientState(GL_NORMAL_ARRAY);
+}
+
+void Visualizer::draw3dLights()
+{
+	// Create light components
+	GLfloat ambientLight[] = { 0.3f, 0.3f, 0.3f, 1.0f };
+	GLfloat diffuseLight[] = { 0.7f, 0.7f, 0.7f, 1.0f };
+	GLfloat specularLight[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	GLfloat position[] = { -0.0f, 4.0f, 1.0f, 1.0f };
+
+	// Assign created components to GL_LIGHT0
+	glLightfv(GL_LIGHT0, GL_AMBIENT, ambientLight);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLight);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, specularLight);
+	glLightfv(GL_LIGHT0, GL_POSITION, position);
 }
 
 void Visualizer::draw3dScene()
 {
 	this->draw3dAxis();
-	this->draw3dGrid(-3,3,-3,3,-3,3);
+	this->draw3dGrid();
+	//this->draw3dPoints(-3,3,-3,3,-3,3);
 }
 
 #define AXIS_SCALE 100000
@@ -291,9 +349,6 @@ void Visualizer::draw3dAxis(void)
 {
 	glPushMatrix ();
 
-		//glTranslatef (-2.4, -1.5, -5);
-		//glRotatef (0 , 1,0,0);
-		//glRotatef (0, 0,1,0);
 		glScalef (AXIS_SCALE,AXIS_SCALE,AXIS_SCALE);
 
 		glLineWidth (1.0);
@@ -315,7 +370,46 @@ void Visualizer::draw3dAxis(void)
 	glPopMatrix ();
 }
 
-void Visualizer::draw3dGrid(int xmin, int xmax, int ymin, int ymax, int zmin, int zmax)
+//parametros para construir la grilla
+#define DEF_floorGridScale	1.0
+#define DEF_floorGridXSteps	10.0
+#define DEF_floorGridZSteps	10.0
+void Visualizer::draw3dGrid()
+{
+	//Dibujo la Grilla
+	GLfloat zExtent, xExtent, xLocal, zLocal;
+	int loopX, loopZ;
+
+	glPushMatrix();
+		//glPushAttrib( GL_LIGHTING_BIT );
+			//glDisable( GL_LIGHTING );
+			//glColor3f( 0.0, 0.7, 0.7 );
+			glBegin( GL_LINES );
+
+				zExtent = DEF_floorGridScale * DEF_floorGridZSteps;
+
+				for(loopX = -DEF_floorGridXSteps; loopX <= DEF_floorGridXSteps; loopX++ )
+				{
+					xLocal = DEF_floorGridScale * loopX;
+					glVertex3f( xLocal, 0.0, -zExtent );
+					glVertex3f( xLocal, 0.0,  zExtent );
+				}
+
+				xExtent = DEF_floorGridScale * DEF_floorGridXSteps;
+
+				for(loopZ = -DEF_floorGridZSteps; loopZ <= DEF_floorGridZSteps; loopZ++ )
+				{
+					zLocal = DEF_floorGridScale * loopZ;
+					glVertex3f( -xExtent, 0.0, zLocal );
+					glVertex3f(  xExtent, 0.0, zLocal );
+				}
+
+			glEnd();
+		//glPopAttrib();
+	glPopMatrix();
+}
+
+void Visualizer::draw3dPoints(int xmin, int xmax, int ymin, int ymax, int zmin, int zmax)
 {
 	glPushMatrix ();
 
@@ -332,7 +426,6 @@ void Visualizer::draw3dGrid(int xmin, int xmax, int ymin, int ymax, int zmin, in
 				for(int k=zmin; k<=zmax; k++)
 				{
 					glBegin (GL_POINTS);
-						//glColor3f (i,j,k);
 						glVertex3i(i,j,k);
 					glEnd();
 				}
