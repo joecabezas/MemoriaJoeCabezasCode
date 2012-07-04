@@ -256,7 +256,7 @@ void Visualizer::processInputEvents(const float elapsed_time)
 	axis_r = (axis_r + 100) * 0.5f;
 	axis_z = (axis_z + 100) * 0.5f;
 
-	camera_angle_velocity = axis_u * 0.01f * 270;
+	camera_angle_velocity = axis_u * 0.01f * 90;
 
 	//calculo velocidad angular
 	camera_azimut = axis_v * 0.01f * 90.f;
@@ -348,15 +348,15 @@ void Visualizer::draw3dModel()
 void Visualizer::draw3dLights()
 {
 	// Create light components
-	GLfloat ambientLight0[] = { 0.0f, 0.0f, 0.0f, 1.0f };
+	GLfloat ambientLight0[] = { 0.1f, 0.1f, 0.1f, 1.0f };
 	GLfloat diffuseLight0[] = { 0.5f, 0.5f, 0.5f, 1.0f };
 	GLfloat specularLight0[] = { 0.9f, 0.9f, 0.9f, 1.0f };
 	GLfloat position0[] = { 0.0f, 1.0f, 0.0f, 0.0f };
 
-	GLfloat ambientLight1[] = { 0.0f, 0.0f, 0.0f, 1.0f };
-	GLfloat diffuseLight1[] = { 0.2f, 0.2f, 0.2f, 1.0f };
-	GLfloat specularLight1[] = { 0.0f, 0.0f, 0.0f, 1.0f };
-	GLfloat position1[] = { -1.0f, -1.0f, 0.0f, 0.0f };
+	GLfloat ambientLight1[] = { 0.05f, 0.05f, 0.05f, 1.0f };
+	GLfloat diffuseLight1[] = { 0.5f, 0.5f, 0.5f, 1.0f };
+	GLfloat specularLight1[] = { 0.5f, 0.5f, 0.5f, 1.0f };
+	GLfloat position1[] = { 0.0f, -1.0f, 0.0f, 0.0f };
 
 //	GLfloat position1[] = {
 //			camera_position[0],
