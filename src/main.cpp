@@ -34,8 +34,11 @@ mpVector Promedio(mp4Vector p1, mp4Vector p2, float value);
 
 int main(int argc, char **argv)
 {
+//	glutInit(&argc, argv);
+
 	//create the visualizer
 	Visualizer visualizer(0.7f, 0.7f);
+
 
 	//create the thread that calculates the marching cubes
 	MarchingCubesThread mc_thread;

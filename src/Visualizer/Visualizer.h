@@ -8,6 +8,10 @@
 #ifndef VISUALIZER_H_
 #define VISUALIZER_H_
 
+//#include <GL/gl.h>
+//#include <GL/glu.h>
+//#include <GL/glut.h>
+
 #include <iostream>
 
 #include <SFML/Graphics.hpp>
@@ -49,7 +53,7 @@ class Visualizer
 
 		//sfml primitives
 		sf::VideoMode* video_mode;
-		sf::RenderWindow* app;
+		sf::Window* app;
 		sf::Clock* clock;
 
 		MarchingCubesThread* mc_thread;

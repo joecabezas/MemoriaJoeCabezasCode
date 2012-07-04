@@ -385,7 +385,7 @@ std::vector< TRIANGLE > MarchingCubesDataset(
 					//calculo de normales
 					t.norm =
 					(
-						(t.p[1] - t.p[0]).Cross(t.p[2] - t.p[0])
+						(t.p[2] - t.p[0]).Cross(t.p[1] - t.p[0])
 					).Normalize();
 
 					triangles.push_back(t);

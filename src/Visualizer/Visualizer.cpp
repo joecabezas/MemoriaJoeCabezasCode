@@ -51,9 +51,6 @@ void Visualizer::setup()
 	//set initial flags
 	this->flag_is_model_valid = false;
 
-	//clock
-	this->clock = new sf::Clock();
-
 	//hud
 	this->hud_status_string = "";
 	this->hud_status = new sf::String();
@@ -62,53 +59,47 @@ void Visualizer::setup()
 	this->video_mode = new sf::VideoMode(this->res_x, this->res_y, 32);
 
 	//window
-	this->app = new sf::RenderWindow(
+	this->app = new sf::Window(
 		*(this->video_mode),
 		"OpenGL xbox cam [Joe]",
 		sf::Style::Titlebar | sf::Style::Close// | sf::Style::Fullscreen
 	);
-
 	this->app->SetFramerateLimit(60);
+
+	//clock
+	this->clock = new sf::Clock();
+
+	// Enable Z-buffer read and write
+	glEnable(GL_DEPTH_TEST);
+	//glDepthMask(GL_TRUE);
 
 	// Set color and depth clear value
 	glClearDepth(1.f);
 	glClearColor(0.f, 0.f, 0.f, 0.f);
 
-	// Enable Z-buffer read and write
-	//glEnable(GL_DEPTH_TEST);
-	//glDepthMask(GL_TRUE);
-	//glDepthRange(0.0f, 1.0f);
+	glEnable(GL_COLOR_MATERIAL);
+	glEnable(GL_NORMALIZE);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
+	glEnable(GL_LIGHT1);
 
-	// track material ambient and diffuse from surface color, call it before glEnable(GL_COLOR_MATERIAL)
-	//glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
-//	glEnable(GL_LIGHTING); //Enable lighting //*
-//	glEnable(GL_LIGHT0); //Enable light #0
-	//glEnable(GL_NORMALIZE); //Automatically normalize normals
-	//glShadeModel(GL_SMOOTH); //Enable smooth shading
+	//Set material properties which will be assigned by glColor
+//	GLfloat mat_ambient_cubo[] = {0.5, 0.5, 0.5, 0.5f};
+//	GLfloat mat_diffuse_cubo[] = {1.0, 1.0, 1.0, 0.7f};
+//	GLfloat mat_specular_cubo[] = {1.0, 1.0, 1.0, 0.3f};
+//	glMaterialfv (GL_FRONT_AND_BACK, GL_AMBIENT, mat_ambient_cubo);
+//	glMaterialfv (GL_FRONT_AND_BACK, GL_DIFFUSE, mat_diffuse_cubo);
+//	glMaterialfv (GL_FRONT_AND_BACK, GL_SPECULAR, mat_specular_cubo);
+//	glMaterialf (GL_FRONT_AND_BACK, GL_SHININESS, 100.0f);
 
-		//glEnable(GL_DEPTH_TEST);
-		//glShadeModel(GL_SMOOTH);
-		glEnable(GL_COLOR_MATERIAL);
-		glEnable(GL_LIGHTING);
-		glEnable(GL_LIGHT0);
-		glEnable(GL_NORMALIZE);
-
-		// Set material properties which will be assigned by glColor
-//		GLfloat color[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-//		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, color);
-//		GLfloat specReflection[] = { 0.8f, 0.8f, 0.8f, 1.0f };
-//		glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specReflection);
-//		GLfloat shininess[] = { 16.0f };
-//		glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
-
-	this->draw3dLights();
+	//this->draw3dLights();
 }
 
 void Visualizer::loop()
 {
-	float elapsed_time = 0;
+	float elapsed_time;
 
-	while (this->app->IsOpened())
+	while(this->app->IsOpened())
 	{
 		//MarchingCubesThread process
 		if(!this->flag_is_model_valid)
@@ -154,37 +145,46 @@ void Visualizer::loop()
 		//draw 3d model
 		this->draw3dModel();
 
-			glBegin(GL_TRIANGLES);
+		//luces
+		this->draw3dLights();
 
-				//Front
-				glNormal3f(0.0f, 0.0f, 1.0f);
-				glVertex3f(0.0f, 0.0f, 0.0f);
+//		glPushMatrix();
+//			glTranslatef(5,5,5);
+//			glutSolidSphere(2.0, 10, 10);
+//		glPopMatrix();
 
-				glNormal3f(0.0f, 0.0f, 1.0f);
-				glVertex3f(0.0f, 1.0f, 0.0f);
-
-				glNormal3f(0.0f, 0.0f, 1.0f);
-				glVertex3f(1.0f, 0.0f, 0.0f);
-
-				//Right
-				glNormal3f(1.0f, 1.0f, 0.0f);
-				glVertex3f(0.0f, 1.0f, 0.0f);
-
-				glNormal3f(1.0f, 1.0f, 0.0f);
-				glVertex3f(0.0f, 1.0f, 1.0f);
-
-				glNormal3f(1.0f, 1.0f, 0.0f);
-				glVertex3f(1.0f, 0.0f, 0.0f);
-
-			glEnd();
+//			glBegin(GL_TRIANGLES);
+//
+//				glColor3f(1.f, 1.f, 1.f);
+//
+//				//Right
+//				glNormal3f(1.0f, 1.0f, 0.0f);
+//				glVertex3f(0.0f, 1.0f, 0.0f);
+//
+//				glNormal3f(1.0f, 1.0f, 0.0f);
+//				glVertex3f(0.0f, 1.0f, 1.0f);
+//
+//				glNormal3f(1.0f, 1.0f, 0.0f);
+//				glVertex3f(1.0f, 0.0f, 0.0f);
+//
+//				//Front
+//				glNormal3f(0.0f, 0.0f, 1.0f);
+//				glVertex3f(0.0f, 0.0f, 0.0f);
+//
+//				glNormal3f(0.0f, 0.0f, 1.0f);
+//				glVertex3f(0.0f, 1.0f, 0.0f);
+//
+//				glNormal3f(0.0f, 0.0f, 1.0f);
+//				glVertex3f(1.0f, 0.0f, 0.0f);
+//
+//			glEnd();
 
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		//glOrtho(-50, 50, -50, 50, -50, 50);
 		gluPerspective(
 			60.f,
 			float(sf::VideoMode::GetMode(0).Width)/float(sf::VideoMode::GetMode(0).Height),
-			0.f, -500.f
+			0.1f, -500.f
 		);
 		//set camera
 		glRotatef(camera_azimut, 1.f, 0.f, 0.f);
@@ -348,16 +348,34 @@ void Visualizer::draw3dModel()
 void Visualizer::draw3dLights()
 {
 	// Create light components
-	GLfloat ambientLight[] = { 0.3f, 0.3f, 0.3f, 1.0f };
-	GLfloat diffuseLight[] = { 0.7f, 0.7f, 0.7f, 1.0f };
-	GLfloat specularLight[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-	GLfloat position[] = { -0.0f, 4.0f, 1.0f, 1.0f };
+	GLfloat ambientLight0[] = { 0.0f, 0.0f, 0.0f, 1.0f };
+	GLfloat diffuseLight0[] = { 0.5f, 0.5f, 0.5f, 1.0f };
+	GLfloat specularLight0[] = { 0.9f, 0.9f, 0.9f, 1.0f };
+	GLfloat position0[] = { 0.0f, 1.0f, 0.0f, 0.0f };
+
+	GLfloat ambientLight1[] = { 0.0f, 0.0f, 0.0f, 1.0f };
+	GLfloat diffuseLight1[] = { 0.2f, 0.2f, 0.2f, 1.0f };
+	GLfloat specularLight1[] = { 0.0f, 0.0f, 0.0f, 1.0f };
+	GLfloat position1[] = { -1.0f, -1.0f, 0.0f, 0.0f };
+
+//	GLfloat position1[] = {
+//			camera_position[0],
+//			camera_position[2],
+//			camera_position[1]
+//	};
 
 	// Assign created components to GL_LIGHT0
-	glLightfv(GL_LIGHT0, GL_AMBIENT, ambientLight);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLight);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, specularLight);
-	glLightfv(GL_LIGHT0, GL_POSITION, position);
+	glLightfv(GL_LIGHT0, GL_AMBIENT, ambientLight0);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLight0);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, specularLight0);
+	glLightfv(GL_LIGHT0, GL_POSITION, position0);
+
+	glLightfv(GL_LIGHT1, GL_AMBIENT, ambientLight1);
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, diffuseLight1);
+	glLightfv(GL_LIGHT1, GL_SPECULAR, specularLight1);
+	glLightfv(GL_LIGHT1, GL_POSITION, position1);
+
+//	glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, 60);
 }
 
 void Visualizer::draw3dScene()
@@ -475,5 +493,5 @@ void Visualizer::drawHudStatus()
 	this->hud_status->SetFont(sf::Font::GetDefaultFont());
 	this->hud_status->SetSize(20);
 
-	this->app->Draw(*(this->hud_status));
+	//this->app->Draw(*(this->hud_status));
 }

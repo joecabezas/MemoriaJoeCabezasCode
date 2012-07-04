@@ -34,8 +34,7 @@ void MarchingCubesThread::readFilesFromStandardInput(int argc, char **argv)
 
 	for (int i = 1; i < argc; ++i)
 	{
-		std::cout << "argv[" << i << "]" << argv[i] << std::endl;
-
+		//std::cout << "argv[" << i << "]" << argv[i] << std::endl;
 		this->dataset->AddImage(argv[i]);
 	}
 }
