@@ -49,7 +49,7 @@ void Visualizer::setup()
 	camera_velocity_strafe[2] = 0.f;
 
 	//set initial flags
-	this->flag_is_model_valid = true;
+	this->flag_is_model_valid = false;
 
 	//hud
 	this->hud_status_string = "";
@@ -357,14 +357,15 @@ void Visualizer::draw3dModel()
 	//glColorPointer(3, GL_FLOAT, 0, colors1);
 	glVertexPointer(3, GL_FLOAT, 6 * sizeof(GLfloat), this->vertexes->data());
 
-	//std::cout << "this->vertexes->size()" << this->vertexes->size() << std::endl;
+//	std::cout << "this->vertexes->size()" << this->vertexes->size() << std::endl;
+//	std::cout << "this->vertexes->size() / 6" << this->vertexes->size() / 6 << std::endl;
 
 	glPushMatrix();
 
 		glScalef(0.05f, 0.05f, 0.05f);
 		glColor3f(1,1,1);
 
-		glDrawArrays(GL_TRIANGLES, 0, this->vertexes->size());
+		glDrawArrays(GL_TRIANGLES, 0, this->vertexes->size() / 6);
 
 	glPopMatrix();
 
