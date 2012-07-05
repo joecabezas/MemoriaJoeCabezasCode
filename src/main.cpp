@@ -23,7 +23,6 @@
 #include "mc/MarchingCubes.h"
 #include "Dataset/Dataset.h"
 #include "MarchingCubesThread/MarchingCubesThread.h"
-#include "filehandlers/OffFile.h"
 #include "Visualizer/Visualizer.h"
 #include "utils/StringUtils.h"
 

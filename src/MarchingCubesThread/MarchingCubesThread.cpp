@@ -79,12 +79,21 @@ void MarchingCubesThread::generateTriangles(float minvalue_scale)
 {
 	this->vertexes.clear();
 	this->triangles.clear();
+
 	this->triangles = MarchingCubesDataset(this->dataset->getMaxVal() * minvalue_scale, *(this->dataset), LinearInterp, this->num_triangles);
 
 	std::cout << "Number of Triangles = " << this->num_triangles << std::endl;
+	std::cout << "this->dataset->getMaxVal() = " << this->dataset->getMaxVal() << std::endl;
 	std::cout << "Minvalue_scale = " << minvalue_scale << std::endl;
+	std::cout << "this->dataset->getMaxVal() * minvalue_scale = " << this->dataset->getMaxVal() * minvalue_scale << std::endl;
 
 //	std::cout << this->triangles[0].p[0].x << std::endl;
 //	std::cout << this->triangles[0].p[0].y << std::endl;
 //	std::cout << this->triangles[0].p[0].z << std::endl;
+}
+
+void MarchingCubesThread::createOffFile()
+{
+	OffFile* f = new OffFile(this->triangles, this->num_triangles);
+	f->createOff();
 }

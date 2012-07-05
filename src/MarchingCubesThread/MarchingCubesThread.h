@@ -12,6 +12,7 @@
 #include <vector>
 
 #include "../mc/MarchingCubes.h"
+#include "../filehandlers/OffFile.h"
 
 class MarchingCubesThread : public sf::Thread
 {
@@ -20,6 +21,8 @@ class MarchingCubesThread : public sf::Thread
 		virtual ~MarchingCubesThread();
 
 		void readFilesFromStandardInput(int argc, char **argv);
+		void createOffFile();
+
 		std::vector< GLfloat >* getTriangles(float minvalue);
 
 	private:

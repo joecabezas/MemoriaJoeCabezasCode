@@ -2,7 +2,7 @@
  * Visualizer.cpp
  *
  *  Created on: Jun 3, 2012
- *      Author: joe
+ *	  Author: joe
  */
 
 #include "Visualizer.h"
@@ -18,8 +18,8 @@ Visualizer::Visualizer(
 	this->setup();
 }
 
-Visualizer::~Visualizer() {
-	// TODO Auto-generated destructor stub
+Visualizer::~Visualizer()
+{
 }
 
 void Visualizer::setMarchingCubesThread(MarchingCubesThread* mc_thread)
@@ -29,7 +29,7 @@ void Visualizer::setMarchingCubesThread(MarchingCubesThread* mc_thread)
 
 void Visualizer::setup()
 {
-	min_value = 0.2f;
+	min_value = 0.4f;
 
 	//initial camera values
 	camera_position[0] = -5.f;
@@ -49,7 +49,7 @@ void Visualizer::setup()
 	camera_velocity_strafe[2] = 0.f;
 
 	//set initial flags
-	this->flag_is_model_valid = false;
+	this->flag_is_model_valid = true;
 
 	//hud
 	this->hud_status_string = "";
@@ -77,12 +77,6 @@ void Visualizer::setup()
 	glClearDepth(1.f);
 	glClearColor(0.f, 0.f, 0.f, 0.f);
 
-	glEnable(GL_COLOR_MATERIAL);
-	glEnable(GL_NORMALIZE);
-	glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0);
-	glEnable(GL_LIGHT1);
-
 	//Set material properties which will be assigned by glColor
 //	GLfloat mat_ambient_cubo[] = {0.5, 0.5, 0.5, 0.5f};
 //	GLfloat mat_diffuse_cubo[] = {1.0, 1.0, 1.0, 0.7f};
@@ -92,7 +86,7 @@ void Visualizer::setup()
 //	glMaterialfv (GL_FRONT_AND_BACK, GL_SPECULAR, mat_specular_cubo);
 //	glMaterialf (GL_FRONT_AND_BACK, GL_SHININESS, 100.0f);
 
-	//this->draw3dLights();
+	this->setup3dLights();
 }
 
 void Visualizer::loop()
@@ -113,8 +107,8 @@ void Visualizer::loop()
 //				printf("vertice %d: %f\n", i, *(this->vertexes)[i]);
 //			}
 
-			this->vertexes_cache = this->vertexes->data();
-
+			//this->vertexes_cache = this->vertexes->data();
+			std::cout << "this->vertexes->size() = " << this->vertexes->size() << std::endl;
 			//make model valid again
 			this->flag_is_model_valid = true;
 		}
@@ -144,9 +138,6 @@ void Visualizer::loop()
 
 		//draw 3d model
 		this->draw3dModel();
-
-		//luces
-		this->draw3dLights();
 
 //		glPushMatrix();
 //			glTranslatef(5,5,5);
@@ -235,11 +226,6 @@ void Visualizer::processInputEvents(const float elapsed_time)
 	//A BUTTON
 	if(Input.IsJoystickButtonDown(0, 0)) this->flag_is_model_valid = false;
 
-
-	//limit min_value to a valid percentual value
-	if(min_value < 0.0f) min_value = 0.0f;
-	if(min_value > 1.0f) min_value = 1.0f;
-
 	if(Input.IsKeyDown(sf::Key::A)) axis_x = -100;
 	if(Input.IsKeyDown(sf::Key::D)) axis_x = 100;
 
@@ -251,6 +237,48 @@ void Visualizer::processInputEvents(const float elapsed_time)
 
 	if(Input.IsKeyDown(sf::Key::Up)) axis_r = 100;
 	if(Input.IsKeyDown(sf::Key::Down)) axis_z = 100;
+
+	//minvalue
+	if(Input.IsKeyDown(sf::Key::Add) || Input.IsKeyDown(sf::Key::F2))
+	{
+		min_value += 0.01f;
+		std::cout << "min_value = " << min_value << std::endl;
+	}
+
+	if(Input.IsKeyDown(sf::Key::Subtract) || Input.IsKeyDown(sf::Key::Dash) || Input.IsKeyDown(sf::Key::F1))
+	{
+		min_value -= 0.01f;
+		std::cout << "min_value = " << min_value << std::endl;
+	}
+
+	//clear vertices vector
+	if(Input.IsKeyDown(sf::Key::N))
+	{
+		std::cout << "A: this->vertexes->size() = " << this->vertexes->size() << std::endl;
+		this->vertexes->clear();
+		std::cout << "B: this->vertexes->size() = " << this->vertexes->size() << std::endl;
+	}
+
+	//generate off file
+	if(Input.IsKeyDown(sf::Key::O))
+	{
+		std::cout << "Generating Off file" << std::endl;
+		this->mc_thread->createOffFile();
+	}
+
+	//take screenshot
+	if(Input.IsKeyDown(sf::Key::P))
+	{
+		std::cout << "Taking Screenshot" << std::endl;
+		std::cout << this->saveScreenshot("screenshot.png", 0, 0, this->res_x, this->res_y) << std::endl;
+	}
+
+	//limit min_value to a valid percentual value
+	if(min_value < 0.0f) min_value = 0.0f;
+	if(min_value > 1.0f) min_value = 1.0f;
+
+	//invaliudate model
+	if(Input.IsKeyDown(sf::Key::Return)) this->flag_is_model_valid = false;
 
 	//escala a eje R y Z
 	axis_r = (axis_r + 100) * 0.5f;
@@ -325,9 +353,9 @@ void Visualizer::draw3dModel()
 	//glEnableClientState(GL_COLOR_ARRAY);
 	glEnableClientState(GL_VERTEX_ARRAY);
 
-	glNormalPointer(GL_FLOAT, 6 * sizeof(GLfloat), this->vertexes_cache + 3);
+	glNormalPointer(GL_FLOAT, 6 * sizeof(GLfloat), this->vertexes->data() + 3);
 	//glColorPointer(3, GL_FLOAT, 0, colors1);
-	glVertexPointer(3, GL_FLOAT, 6 * sizeof(GLfloat), this->vertexes_cache);
+	glVertexPointer(3, GL_FLOAT, 6 * sizeof(GLfloat), this->vertexes->data());
 
 	//std::cout << "this->vertexes->size()" << this->vertexes->size() << std::endl;
 
@@ -345,16 +373,22 @@ void Visualizer::draw3dModel()
 	glDisableClientState(GL_NORMAL_ARRAY);
 }
 
-void Visualizer::draw3dLights()
+void Visualizer::setup3dLights()
 {
+	glEnable(GL_COLOR_MATERIAL);
+	glEnable(GL_NORMALIZE);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
+	glEnable(GL_LIGHT1);
+
 	// Create light components
-	GLfloat ambientLight0[] = { 0.1f, 0.1f, 0.1f, 1.0f };
+	GLfloat ambientLight0[] = { 0.25f, 0.25f, 0.25f, 1.0f };
 	GLfloat diffuseLight0[] = { 0.5f, 0.5f, 0.5f, 1.0f };
 	GLfloat specularLight0[] = { 0.9f, 0.9f, 0.9f, 1.0f };
 	GLfloat position0[] = { 0.0f, 1.0f, 0.0f, 0.0f };
 
 	GLfloat ambientLight1[] = { 0.05f, 0.05f, 0.05f, 1.0f };
-	GLfloat diffuseLight1[] = { 0.5f, 0.5f, 0.5f, 1.0f };
+	GLfloat diffuseLight1[] = { 0.2f, 0.2f, 0.2f, 1.0f };
 	GLfloat specularLight1[] = { 0.5f, 0.5f, 0.5f, 1.0f };
 	GLfloat position1[] = { 0.0f, -1.0f, 0.0f, 0.0f };
 
@@ -494,4 +528,99 @@ void Visualizer::drawHudStatus()
 	this->hud_status->SetSize(20);
 
 	//this->app->Draw(*(this->hud_status));
+}
+
+int Visualizer::saveScreenshot(char *file_name, unsigned int x, unsigned int y, unsigned long width, unsigned long height)
+{
+	FILE *fp;
+	unsigned long i;
+	png_structp png_ptr;
+	png_infop info_ptr;
+	png_colorp palette;
+	png_byte *image;
+	png_bytep *row_pointers;
+
+	fp = fopen(file_name, "wb");
+	if (fp == NULL)
+		return -1;
+
+	png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+
+	if (png_ptr == NULL)
+	{
+		fclose(fp);
+		return -1;
+	}
+
+	info_ptr = png_create_info_struct(png_ptr);
+	if (info_ptr == NULL)
+	{
+		fclose(fp);
+		png_destroy_write_struct(&png_ptr, png_infopp_NULL);
+		return -1;
+	}
+
+	if (setjmp(png_jmpbuf(png_ptr)))
+	{
+		fclose(fp);
+		png_destroy_write_struct(&png_ptr, &info_ptr);
+		return -1;
+	}
+
+	png_init_io(png_ptr, fp);
+
+	png_set_IHDR(png_ptr, info_ptr, width, height, 8, PNG_COLOR_TYPE_RGB,
+		PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
+
+	palette = (png_colorp)png_malloc(png_ptr, PNG_MAX_PALETTE_LENGTH * sizeof (png_color));
+	png_set_PLTE(png_ptr, info_ptr, palette, PNG_MAX_PALETTE_LENGTH);
+
+	png_write_info(png_ptr, info_ptr);
+
+	png_set_packing(png_ptr);
+
+	image = (png_byte *)malloc(width * height * 3 * sizeof(png_byte));
+	if(image == NULL)
+	{
+		fclose(fp);
+		png_destroy_write_struct(&png_ptr, &info_ptr);
+		return -1;
+	}
+
+	row_pointers = (png_bytep *)malloc(height * sizeof(png_bytep));
+	if(row_pointers == NULL)
+	{
+		fclose(fp);
+		png_destroy_write_struct(&png_ptr, &info_ptr);
+		free(image);
+		image = NULL;
+		return -1;
+	}
+
+	glPixelStorei(GL_PACK_ALIGNMENT, 1);
+	glReadPixels(x, y, width, height, GL_RGB, GL_UNSIGNED_BYTE, (GLvoid *)image);
+
+	for (i = 0; i < height; i++)
+	{
+		row_pointers[i] = (png_bytep)image + (height - i) * width * 3;
+	}
+
+	png_write_image(png_ptr, row_pointers);
+
+	png_write_end(png_ptr, info_ptr);
+
+	png_free(png_ptr, palette);
+	palette = NULL;
+
+	png_destroy_write_struct(&png_ptr, &info_ptr);
+
+	free(row_pointers);
+	row_pointers = NULL;
+
+	free(image);
+	image = NULL;
+
+	fclose(fp);
+
+	return 0;
 }

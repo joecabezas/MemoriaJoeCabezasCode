@@ -15,6 +15,7 @@
 #include <iostream>
 
 #include <SFML/Graphics.hpp>
+#include <png.h>
 
 #include "../mc/MarchingCubes.h"
 #include "../MarchingCubesThread/MarchingCubesThread.h"
@@ -29,6 +30,7 @@ class Visualizer
 		void updateHudStatus(std::string);
 
 		void setMarchingCubesThread(MarchingCubesThread*);
+		int saveScreenshot(char *file_name, unsigned int x, unsigned int y, unsigned long width, unsigned long height);
 
 		void loop();
 
@@ -37,7 +39,7 @@ class Visualizer
 		void processInputEvents(const float);
 		void processStackEvents(float);
 
-		void draw3dLights();
+		void setup3dLights();
 		void draw3dScene();
 		void draw3dAxis();
 		void draw3dGrid();
