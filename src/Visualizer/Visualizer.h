@@ -57,6 +57,8 @@ class Visualizer
 		sf::VideoMode* video_mode;
 		sf::Window* app;
 		sf::Clock* clock;
+		unsigned long int window_style;
+		std::string window_title;
 
 		MarchingCubesThread* mc_thread;
 
@@ -82,6 +84,8 @@ class Visualizer
 		GLfloat camera_angle_velocity;
 		GLfloat camera_azimut;
 		GLfloat camera_velocity_strafe[3];
+
+		GLfloat model_rotation[3];
 
 		//flags
 		bool flag_is_model_valid;

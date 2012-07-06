@@ -48,6 +48,10 @@ void Visualizer::setup()
 	camera_velocity_strafe[1] = 0.f;
 	camera_velocity_strafe[2] = 0.f;
 
+	model_rotation[0] = 0.f;
+	model_rotation[1] = 0.f;
+	model_rotation[2] = 0.f;
+
 	//set initial flags
 	this->flag_is_model_valid = false;
 
@@ -58,11 +62,19 @@ void Visualizer::setup()
 	//video mode
 	this->video_mode = new sf::VideoMode(this->res_x, this->res_y, 32);
 
+	//title
+	this->window_title = "OpenGL xbox cam [Joe]";
+
+	//style
+	this->window_style =
+			//sf::Style::Fullscreen |
+			sf::Style::Titlebar |
+			sf::Style::Close;
+
 	//window
 	this->app = new sf::Window(
 		*(this->video_mode),
-		"OpenGL xbox cam [Joe]",
-		sf::Style::Titlebar | sf::Style::Close// | sf::Style::Fullscreen
+		this->window_title, this->window_style
 	);
 	this->app->SetFramerateLimit(60);
 
@@ -251,6 +263,11 @@ void Visualizer::processInputEvents(const float elapsed_time)
 		std::cout << "min_value = " << min_value << std::endl;
 	}
 
+	//limit min_value to a valid percentual value
+	if(min_value < 0.0f) min_value = 0.0f;
+	if(min_value > 1.0f) min_value = 1.0f;
+
+
 	//clear vertices vector
 	if(Input.IsKeyDown(sf::Key::N))
 	{
@@ -273,12 +290,9 @@ void Visualizer::processInputEvents(const float elapsed_time)
 		std::cout << this->saveScreenshot("screenshot.png", 0, 0, this->res_x, this->res_y) << std::endl;
 	}
 
-	//limit min_value to a valid percentual value
-	if(min_value < 0.0f) min_value = 0.0f;
-	if(min_value > 1.0f) min_value = 1.0f;
-
-	//invaliudate model
-	if(Input.IsKeyDown(sf::Key::Return)) this->flag_is_model_valid = false;
+	//rotate model
+	if(Input.IsKeyDown(sf::Key::R)) this->model_rotation[0] += 1.f;
+	if(Input.IsKeyDown(sf::Key::F)) this->model_rotation[0] -= 1.f;
 
 	//escala a eje R y Z
 	axis_r = (axis_r + 100) * 0.5f;
@@ -331,15 +345,31 @@ void Visualizer::processStackEvents(float elapsed_time)
 						this->app->Close();
 						break;
 
+					case sf::Key::F11:
+						if(this->window_style & sf::Style::Fullscreen)
+						this->window_style =
+						sf::Style::Titlebar |
+						sf::Style::Close;
+						else
+						this->window_style =
+						sf::Style::Fullscreen;
+
+						this->app->Create(*this->video_mode, this->window_title, this->window_style);
+						break;
+
+					case sf::Key::Return:
+						this->flag_is_model_valid = false;
+						break;
+
 					default:
 						break;
 				}
 
 				break;
 
-			case sf::Event::Resized:
-				glViewport(0, 0, Event.Size.Width, Event.Size.Height);
-				break;
+				case sf::Event::Resized:
+					glViewport(0, 0, Event.Size.Width, Event.Size.Height);
+					break;
 
 			default:
 				break;
@@ -364,6 +394,8 @@ void Visualizer::draw3dModel()
 
 		glScalef(0.05f, 0.05f, 0.05f);
 		glColor3f(1,1,1);
+		glRotatef(this->model_rotation[0], 1.f, 0.f, 0.f);
+		glRotatef(this->model_rotation[1], 0.f, 1.f, 0.f);
 
 		glDrawArrays(GL_TRIANGLES, 0, this->vertexes->size() / 6);
 
