@@ -276,6 +276,8 @@ void Visualizer::processInputEvents(const float elapsed_time)
 	//rotate model
 	if(Input.IsKeyDown(sf::Key::R)) this->model_rotation[0] += 1.f;
 	if(Input.IsKeyDown(sf::Key::F)) this->model_rotation[0] -= 1.f;
+	if(Input.IsKeyDown(sf::Key::T)) this->model_rotation[1] += 1.f;
+	if(Input.IsKeyDown(sf::Key::G)) this->model_rotation[1] -= 1.f;
 
 	//escala a eje R y Z
 	axis_r = (axis_r + 100) * 0.5f;
