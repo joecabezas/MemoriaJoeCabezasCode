@@ -47,7 +47,7 @@ std::vector< GLfloat >* MarchingCubesThread::getTriangles(float minvalue_scale)
 
 	for(unsigned int i=0; i < this->num_triangles; i++)
 	{
-		for(int j=0; j < 3; j++)
+		for(int j=2; j >= 0; j--)
 		{
 //			array[i*9 + j*3 + 0] = (*this->triangles)[i].p[j].x;
 //			array[i*9 + j*3 + 1] = (*this->triangles)[i].p[j].y;

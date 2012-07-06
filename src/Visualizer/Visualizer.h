@@ -10,9 +10,11 @@
 
 //#include <GL/gl.h>
 //#include <GL/glu.h>
-//#include <GL/glut.h>
+#include <GL/glut.h>
 
 #include <iostream>
+#include <sstream>
+//#include <iomanip>
 
 #include <SFML/Graphics.hpp>
 #include <png.h>
@@ -39,16 +41,21 @@ class Visualizer
 		void processInputEvents(const float);
 		void processStackEvents(float);
 
-		void setup3dLights();
+		//3D
+		void setupOpenGL();
 		void draw3dScene();
 		void draw3dAxis();
 		void draw3dGrid();
 		void draw3dPoints(int, int, int, int, int, int);
 		void draw3dModel();
 
+		//2D
+		void draw2dString(const char *str, int x, int y, float color[4], void *font);
+
 		//hud
 		void drawHud();
 		void drawHudStatus();
+		void showInfo();
 
 		std::string hud_status_string;
 		sf::String* hud_status;

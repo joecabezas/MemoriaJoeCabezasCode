@@ -33,7 +33,7 @@ mpVector Promedio(mp4Vector p1, mp4Vector p2, float value);
 
 int main(int argc, char **argv)
 {
-//	glutInit(&argc, argv);
+	glutInit(&argc, argv);
 
 	//create the visualizer
 	Visualizer visualizer(0.7f, 0.7f);

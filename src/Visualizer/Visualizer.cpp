@@ -81,24 +81,7 @@ void Visualizer::setup()
 	//clock
 	this->clock = new sf::Clock();
 
-	// Enable Z-buffer read and write
-	glEnable(GL_DEPTH_TEST);
-	//glDepthMask(GL_TRUE);
-
-	// Set color and depth clear value
-	glClearDepth(1.f);
-	glClearColor(0.f, 0.f, 0.f, 0.f);
-
-	//Set material properties which will be assigned by glColor
-//	GLfloat mat_ambient_cubo[] = {0.5, 0.5, 0.5, 0.5f};
-//	GLfloat mat_diffuse_cubo[] = {1.0, 1.0, 1.0, 0.7f};
-//	GLfloat mat_specular_cubo[] = {1.0, 1.0, 1.0, 0.3f};
-//	glMaterialfv (GL_FRONT_AND_BACK, GL_AMBIENT, mat_ambient_cubo);
-//	glMaterialfv (GL_FRONT_AND_BACK, GL_DIFFUSE, mat_diffuse_cubo);
-//	glMaterialfv (GL_FRONT_AND_BACK, GL_SPECULAR, mat_specular_cubo);
-//	glMaterialf (GL_FRONT_AND_BACK, GL_SHININESS, 100.0f);
-
-	this->setup3dLights();
+	this->setupOpenGL();
 }
 
 void Visualizer::loop()
@@ -197,7 +180,7 @@ void Visualizer::loop()
 		//printf("caz: %f | ca: %f | cp: %f\n", camera_azimut, camera_angle, camera_position[0]);
 
 		//draw Hud (User Interface)
-		//this->drawHud();
+		this->showInfo();
 
 		// Finally, display rendered frame on screen
 		this->app->Display();
@@ -287,7 +270,7 @@ void Visualizer::processInputEvents(const float elapsed_time)
 	if(Input.IsKeyDown(sf::Key::P))
 	{
 		std::cout << "Taking Screenshot" << std::endl;
-		std::cout << this->saveScreenshot("screenshot.png", 0, 0, this->res_x, this->res_y) << std::endl;
+		std::cout << this->saveScreenshot((char*)"screenshot.png", 0, 0, this->res_x, this->res_y) << std::endl;
 	}
 
 	//rotate model
@@ -347,14 +330,15 @@ void Visualizer::processStackEvents(float elapsed_time)
 
 					case sf::Key::F11:
 						if(this->window_style & sf::Style::Fullscreen)
-						this->window_style =
-						sf::Style::Titlebar |
-						sf::Style::Close;
+							this->window_style =
+								sf::Style::Titlebar |
+								sf::Style::Close;
 						else
-						this->window_style =
-						sf::Style::Fullscreen;
+							this->window_style =
+									sf::Style::Fullscreen;
 
 						this->app->Create(*this->video_mode, this->window_title, this->window_style);
+						this->setupOpenGL();
 						break;
 
 					case sf::Key::Return:
@@ -406,8 +390,28 @@ void Visualizer::draw3dModel()
 	glDisableClientState(GL_NORMAL_ARRAY);
 }
 
-void Visualizer::setup3dLights()
+void Visualizer::setupOpenGL()
 {
+	// Enable Z-buffer read and write
+	glEnable(GL_DEPTH_TEST);
+	//glDepthMask(GL_TRUE);
+
+	glEnable(GL_TEXTURE_2D);
+	//glEnable(GL_CULL_FACE);
+
+	// Set color and depth clear value
+	glClearDepth(1.f);
+	glClearColor(0.f, 0.f, 0.f, 0.f);
+
+	//Set material properties which will be assigned by glColor
+//	GLfloat mat_ambient_cubo[] = {0.5, 0.5, 0.5, 0.5f};
+//	GLfloat mat_diffuse_cubo[] = {1.0, 1.0, 1.0, 0.7f};
+//	GLfloat mat_specular_cubo[] = {1.0, 1.0, 1.0, 0.3f};
+//	glMaterialfv (GL_FRONT_AND_BACK, GL_AMBIENT, mat_ambient_cubo);
+//	glMaterialfv (GL_FRONT_AND_BACK, GL_DIFFUSE, mat_diffuse_cubo);
+//	glMaterialfv (GL_FRONT_AND_BACK, GL_SPECULAR, mat_specular_cubo);
+//	glMaterialf (GL_FRONT_AND_BACK, GL_SHININESS, 100.0f);
+
 	glEnable(GL_COLOR_MATERIAL);
 	glEnable(GL_NORMALIZE);
 	glEnable(GL_LIGHTING);
@@ -545,7 +549,8 @@ void Visualizer::draw3dPoints(int xmin, int xmax, int ymin, int ymax, int zmin, 
 
 void Visualizer::drawHud()
 {
-	this->drawHudStatus();
+	this->showInfo();
+	//this->drawHudStatus();
 }
 
 void Visualizer::updateHudStatus(std::string status)
@@ -656,4 +661,73 @@ int Visualizer::saveScreenshot(char *file_name, unsigned int x, unsigned int y, 
 	fclose(fp);
 
 	return 0;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// write 2d text using GLUT
+// The projection matrix must be set to orthogonal before call this function.
+///////////////////////////////////////////////////////////////////////////////
+void Visualizer::draw2dString(const char *str, int x, int y, float color[4], void *font)
+{
+    glPushAttrib(GL_LIGHTING_BIT | GL_CURRENT_BIT); // lighting and color mask
+		glDisable(GL_LIGHTING);     // need to disable lighting for proper text color
+		glDisable(GL_DEPTH_TEST);
+
+			glColor4fv(color);          // set text color
+			//glRasterPos2i(x, y);        // place text position
+			glPushMatrix();
+				glTranslatef(x, y, 0);
+				glScalef(0.2f, 0.2f, 0.2f);
+				glLineWidth(2.f);
+
+				// loop all characters in the string
+				while(*str)
+				{
+					//glutBitmapCharacter(font, *str);
+					glutStrokeCharacter(font, *str);
+					++str;
+				}
+			glPopMatrix();
+
+		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_LIGHTING);
+    glPopAttrib();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// display info messages
+///////////////////////////////////////////////////////////////////////////////
+void Visualizer::showInfo()
+{
+    // backup current model-view matrix
+    //glPushMatrix();                     // save current modelview matrix
+    //glLoadIdentity();                   // reset modelview matrix
+
+    // set to 2D orthogonal projection
+    glMatrixMode(GL_PROJECTION);        // switch to projection matrix
+    glPushMatrix();                     // save current projection matrix
+		glLoadIdentity();                   // reset projection matrix
+		gluOrtho2D(0, this->res_x, 0, this->res_y); // set to orthogonal projection
+		float color[4] = {1, 1, 1, 1};
+
+		std::stringstream ss;
+		//ss << std::fixed << std::setprecision(3);
+
+		ss << "Min value (isosurface): " << this->min_value << std::ends;
+		this->draw2dString(ss.str().c_str(), this->res_x*0.005, this->res_y*0.95, color, GLUT_STROKE_ROMAN);
+		ss.str("");
+
+		ss << "Triangles: " << this->vertexes->size() / 18 << std::ends;
+		this->draw2dString(ss.str().c_str(), this->res_x*0.005, this->res_y*0.895, color, GLUT_STROKE_ROMAN);
+		ss.str("");
+
+		// unset floating format
+		//ss << std::resetiosflags(std::ios_base::fixed | std::ios_base::floatfield);
+
+	// restore projection matrix
+    glPopMatrix();                   // restore to previous projection matrix
+
+    // restore modelview matrix
+    //glMatrixMode(GL_MODELVIEW);      // switch to modelview matrix
+    //glPopMatrix();                   // restore to previous modelview matrix
 }
