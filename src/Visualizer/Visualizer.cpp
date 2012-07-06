@@ -713,7 +713,7 @@ void Visualizer::showInfo()
 		std::stringstream ss;
 		//ss << std::fixed << std::setprecision(3);
 
-		ss << "Min value (isosurface): " << this->min_value << std::ends;
+		ss << "Min value (isosurface): " << this->min_value*100 << "%" << std::ends;
 		this->draw2dString(ss.str().c_str(), this->res_x*0.005, this->res_y*0.95, color, GLUT_STROKE_ROMAN);
 		ss.str("");
 
