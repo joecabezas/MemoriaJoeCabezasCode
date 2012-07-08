@@ -13,7 +13,6 @@ mencionada.
 OPCIONES:
 	-h	Imprime este mensaje de ayuda de uso
 	-d	Carpeta donde estan las imagenes a transformar
-	-e	Extension de los archivos a transformar
 	-t	Carpeta destino de imagenes transformadas (default: pgm)
 	-r	Argumento -resize usado por ImageMagick (default: 100%)
 	-a	Modo sin compresion ASCII de imagemagick (-compress none)
@@ -33,8 +32,8 @@ while getopts "hd:e:t:r:a" opt; do
 		d)
 			BASE_DIR=$OPTARG
 			;;
-		e)
-			EXTENSION=$OPTARG
+		t)
+			TARGET_DIR=$OPTARG
 			;;
 		r)
 			RESIZE=$OPTARG
@@ -48,7 +47,6 @@ done
 #VALORES POR DEFECTO
 if [ -z "$BASE_DIR" ]; then BASE_DIR="."; fi
 if [ -z "$RESIZE" ]; then RESIZE="100%"; fi
-if [ -z "$EXTENSION" ]; then EXTENSION="tif"; fi
 if [ -z "$TARGET_DIR" ]; then TARGET_DIR="pgm"; fi
 
 ###########
@@ -65,6 +63,6 @@ if [ ! -d "$TARGET_DIR" ]; then
 	mkdir "$TARGET_DIR"
 fi 
 
-for f in *.$EXTENSION; do
+for f in *; do
 	convert "$f" $ARGUMENTS "$TARGET_DIR/$f.pgm"
 done
