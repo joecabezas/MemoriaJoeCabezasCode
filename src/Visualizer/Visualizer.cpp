@@ -25,6 +25,7 @@ Visualizer::~Visualizer()
 void Visualizer::setMarchingCubesThread(MarchingCubesThread* mc_thread)
 {
 	this->mc_thread = mc_thread;
+	this->vertexes = this->mc_thread->getVertexPointer();
 }
 
 void Visualizer::setup()
@@ -53,7 +54,7 @@ void Visualizer::setup()
 	model_rotation[2] = 0.f;
 
 	//set initial flags
-	this->flag_is_model_valid = false;
+	this->flag_is_model_valid = true;
 
 	//hud
 	this->hud_status_string = "";
@@ -94,16 +95,10 @@ void Visualizer::loop()
 		if(!this->flag_is_model_valid)
 		{
 			this->updateHudStatus("Generating Marching Cubes...");
-			this->vertexes = this->mc_thread->getTriangles(min_value);
+			this->mc_thread->setMinValueScale(min_value);
+			this->mc_thread->Launch();
 			this->updateHudStatus("Marching Cubes Done");
 
-//			for(unsigned int i=0; i < 3; i++)
-//			{
-//				printf("vertice %d: %f\n", i, *(this->vertexes)[i]);
-//			}
-
-			//this->vertexes_cache = this->vertexes->data();
-			std::cout << "this->vertexes->size() = " << this->vertexes->size() << std::endl;
 			//make model valid again
 			this->flag_is_model_valid = true;
 		}
@@ -270,7 +265,9 @@ void Visualizer::processInputEvents(const float elapsed_time)
 	if(Input.IsKeyDown(sf::Key::P))
 	{
 		std::cout << "Taking Screenshot" << std::endl;
-		std::cout << this->saveScreenshot((char*)"screenshot.png", 0, 0, this->res_x, this->res_y) << std::endl;
+		std::stringstream ss;
+		ss << "screenshot_" << this->min_value*100 << ".png";
+		std::cout << this->saveScreenshot(ss.str(), 0, 0, this->res_x, this->res_y) << std::endl;
 	}
 
 	//rotate model
@@ -570,7 +567,7 @@ void Visualizer::drawHudStatus()
 	//this->app->Draw(*(this->hud_status));
 }
 
-int Visualizer::saveScreenshot(char *file_name, unsigned int x, unsigned int y, unsigned long width, unsigned long height)
+int Visualizer::saveScreenshot(std::string file_name, unsigned int x, unsigned int y, unsigned long width, unsigned long height)
 {
 	FILE *fp;
 	unsigned long i;
@@ -580,7 +577,7 @@ int Visualizer::saveScreenshot(char *file_name, unsigned int x, unsigned int y, 
 	png_byte *image;
 	png_bytep *row_pointers;
 
-	fp = fopen(file_name, "wb");
+	fp = fopen(file_name.c_str(), "wb");
 	if (fp == NULL)
 		return -1;
 

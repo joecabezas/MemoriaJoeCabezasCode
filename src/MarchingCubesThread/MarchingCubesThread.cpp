@@ -19,12 +19,13 @@ MarchingCubesThread::~MarchingCubesThread()
 
 void MarchingCubesThread::Run()
 {
-	while(true);
+	this->generateTriangles();
 }
 
 void MarchingCubesThread::setup()
 {
 	this->dataset = new Dataset();
+	this->vertexes.clear();
 }
 
 void MarchingCubesThread::readFilesFromStandardInput(int argc, char **argv)
@@ -39,11 +40,21 @@ void MarchingCubesThread::readFilesFromStandardInput(int argc, char **argv)
 	}
 }
 
-std::vector< GLfloat >* MarchingCubesThread::getTriangles(float minvalue_scale)
+void MarchingCubesThread::generateTriangles()
 {
-	this->generateTriangles(minvalue_scale);
+	this->vertexes.clear();
+	this->triangles.clear();
 
-	//GLfloat array[3 * this->num_triangles];
+	this->triangles = MarchingCubesDataset(this->dataset->getMaxVal() * this->min_value_scale, *(this->dataset), LinearInterp, this->num_triangles);
+
+	std::cout << "Number of Triangles = " << this->num_triangles << std::endl;
+	std::cout << "this->dataset->getMaxVal() = " << this->dataset->getMaxVal() << std::endl;
+	std::cout << "this->min_value_scale = " << this->min_value_scale << std::endl;
+	std::cout << "this->dataset->getMaxVal() * this->min_value_scale = " << this->dataset->getMaxVal() * this->min_value_scale << std::endl;
+
+//	std::cout << this->triangles[0].p[0].x << std::endl;
+//	std::cout << this->triangles[0].p[0].y << std::endl;
+//	std::cout << this->triangles[0].p[0].z << std::endl;
 
 	for(unsigned int i=0; i < this->num_triangles; i++)
 	{
@@ -71,29 +82,20 @@ std::vector< GLfloat >* MarchingCubesThread::getTriangles(float minvalue_scale)
 			this->vertexes.push_back(this->triangles[i].norm.z);
 		}
 	}
-
-	return &(this->vertexes);
-}
-
-void MarchingCubesThread::generateTriangles(float minvalue_scale)
-{
-	this->vertexes.clear();
-	this->triangles.clear();
-
-	this->triangles = MarchingCubesDataset(this->dataset->getMaxVal() * minvalue_scale, *(this->dataset), LinearInterp, this->num_triangles);
-
-	std::cout << "Number of Triangles = " << this->num_triangles << std::endl;
-	std::cout << "this->dataset->getMaxVal() = " << this->dataset->getMaxVal() << std::endl;
-	std::cout << "Minvalue_scale = " << minvalue_scale << std::endl;
-	std::cout << "this->dataset->getMaxVal() * minvalue_scale = " << this->dataset->getMaxVal() * minvalue_scale << std::endl;
-
-//	std::cout << this->triangles[0].p[0].x << std::endl;
-//	std::cout << this->triangles[0].p[0].y << std::endl;
-//	std::cout << this->triangles[0].p[0].z << std::endl;
 }
 
 void MarchingCubesThread::createOffFile()
 {
 	OffFile* f = new OffFile(this->triangles, this->num_triangles);
 	f->createOff();
+}
+
+std::vector< GLfloat >* MarchingCubesThread::getVertexPointer()
+{
+	return &this->vertexes;
+}
+
+void MarchingCubesThread::setMinValueScale(float min_value_scale)
+{
+	this->min_value_scale = min_value_scale;
 }

@@ -23,7 +23,9 @@ class MarchingCubesThread : public sf::Thread
 		void readFilesFromStandardInput(int argc, char **argv);
 		void createOffFile();
 
-		std::vector< GLfloat >* getTriangles(float minvalue);
+		std::vector< GLfloat >* getVertexPointer();
+
+		void setMinValueScale(float);
 
 	private:
 		vector_triangles triangles;
@@ -31,10 +33,11 @@ class MarchingCubesThread : public sf::Thread
 		std::vector< GLfloat > vertexes;
 
 		unsigned int num_triangles;
+		float min_value_scale;
 
 		void setup();
 
-		void generateTriangles(float minvalue);
+		void generateTriangles();
 
 		//overrides
 		virtual void Run();

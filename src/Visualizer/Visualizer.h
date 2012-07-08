@@ -32,7 +32,7 @@ class Visualizer
 		void updateHudStatus(std::string);
 
 		void setMarchingCubesThread(MarchingCubesThread*);
-		int saveScreenshot(char *file_name, unsigned int x, unsigned int y, unsigned long width, unsigned long height);
+		int saveScreenshot(std::string file_name, unsigned int x, unsigned int y, unsigned long width, unsigned long height);
 
 		void loop();
 
