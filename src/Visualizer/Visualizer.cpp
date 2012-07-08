@@ -129,36 +129,13 @@ void Visualizer::loop()
 		//draw 3d model
 		this->draw3dModel();
 
+		//draw Hud (User Interface)
+		this->showInfo();
+
 //		glPushMatrix();
 //			glTranslatef(5,5,5);
 //			glutSolidSphere(2.0, 10, 10);
 //		glPopMatrix();
-
-//			glBegin(GL_TRIANGLES);
-//
-//				glColor3f(1.f, 1.f, 1.f);
-//
-//				//Right
-//				glNormal3f(1.0f, 1.0f, 0.0f);
-//				glVertex3f(0.0f, 1.0f, 0.0f);
-//
-//				glNormal3f(1.0f, 1.0f, 0.0f);
-//				glVertex3f(0.0f, 1.0f, 1.0f);
-//
-//				glNormal3f(1.0f, 1.0f, 0.0f);
-//				glVertex3f(1.0f, 0.0f, 0.0f);
-//
-//				//Front
-//				glNormal3f(0.0f, 0.0f, 1.0f);
-//				glVertex3f(0.0f, 0.0f, 0.0f);
-//
-//				glNormal3f(0.0f, 0.0f, 1.0f);
-//				glVertex3f(0.0f, 1.0f, 0.0f);
-//
-//				glNormal3f(0.0f, 0.0f, 1.0f);
-//				glVertex3f(1.0f, 0.0f, 0.0f);
-//
-//			glEnd();
 
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
@@ -173,9 +150,6 @@ void Visualizer::loop()
 		glTranslatef(camera_position[0], camera_position[2], camera_position[1]);
 
 		//printf("caz: %f | ca: %f | cp: %f\n", camera_azimut, camera_angle, camera_position[0]);
-
-		//draw Hud (User Interface)
-		this->showInfo();
 
 		// Finally, display rendered frame on screen
 		this->app->Display();
@@ -267,7 +241,7 @@ void Visualizer::processInputEvents(const float elapsed_time)
 		std::cout << "Taking Screenshot" << std::endl;
 		std::stringstream ss;
 		ss << "screenshot_" << this->min_value*100 << ".png";
-		std::cout << this->saveScreenshot(ss.str(), 0, 0, this->res_x, this->res_y) << std::endl;
+		std::cout << this->saveScreenshot(ss.str(), 0, 0, this->app->GetWidth(), this->app->GetHeight()) << std::endl;
 	}
 
 	//rotate model
@@ -450,19 +424,21 @@ void Visualizer::setupOpenGL()
 
 void Visualizer::draw3dScene()
 {
-	this->draw3dAxis();
-	this->draw3dGrid();
-	//this->draw3dPoints(-3,3,-3,3,-3,3);
+	glDisable(GL_LIGHTING);
+		this->draw3dAxis();
+		this->draw3dGrid();
+		//this->draw3dPoints(-3,3,-3,3,-3,3);
+	glEnable(GL_LIGHTING);
 }
 
-#define AXIS_SCALE 100000
+#define AXIS_SCALE 10
 void Visualizer::draw3dAxis(void)
 {
 	glPushMatrix ();
 
 		glScalef (AXIS_SCALE,AXIS_SCALE,AXIS_SCALE);
 
-		glLineWidth (1.0);
+		glLineWidth (2.0);
 
 		glBegin (GL_LINES);
 			glColor3f (1,0,0); // X axis is red.
@@ -494,7 +470,9 @@ void Visualizer::draw3dGrid()
 	glPushMatrix();
 		//glPushAttrib( GL_LIGHTING_BIT );
 			//glDisable( GL_LIGHTING );
-			//glColor3f( 0.0, 0.7, 0.7 );
+			glColor3f(0.1,0.1,0.1);
+			glLineWidth(1);
+
 			glBegin( GL_LINES );
 
 				zExtent = DEF_floorGridScale * DEF_floorGridZSteps;
@@ -663,37 +641,6 @@ int Visualizer::saveScreenshot(std::string file_name, unsigned int x, unsigned i
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// write 2d text using GLUT
-// The projection matrix must be set to orthogonal before call this function.
-///////////////////////////////////////////////////////////////////////////////
-void Visualizer::draw2dString(const char *str, int x, int y, float color[4], void *font)
-{
-    glPushAttrib(GL_LIGHTING_BIT | GL_CURRENT_BIT); // lighting and color mask
-		glDisable(GL_LIGHTING);     // need to disable lighting for proper text color
-		glDisable(GL_DEPTH_TEST);
-
-			glColor4fv(color);          // set text color
-			//glRasterPos2i(x, y);        // place text position
-			glPushMatrix();
-				glTranslatef(x, y, 0);
-				glScalef(0.2f, 0.2f, 0.2f);
-				glLineWidth(2.f);
-
-				// loop all characters in the string
-				while(*str)
-				{
-					//glutBitmapCharacter(font, *str);
-					glutStrokeCharacter(font, *str);
-					++str;
-				}
-			glPopMatrix();
-
-		glEnable(GL_DEPTH_TEST);
-		glEnable(GL_LIGHTING);
-    glPopAttrib();
-}
-
-///////////////////////////////////////////////////////////////////////////////
 // display info messages
 ///////////////////////////////////////////////////////////////////////////////
 void Visualizer::showInfo()
@@ -729,4 +676,35 @@ void Visualizer::showInfo()
     // restore modelview matrix
     //glMatrixMode(GL_MODELVIEW);      // switch to modelview matrix
     //glPopMatrix();                   // restore to previous modelview matrix
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// write 2d text using GLUT
+// The projection matrix must be set to orthogonal before call this function.
+///////////////////////////////////////////////////////////////////////////////
+void Visualizer::draw2dString(const char *str, int x, int y, float color[4], void *font)
+{
+    glPushAttrib(GL_LIGHTING_BIT | GL_CURRENT_BIT); // lighting and color mask
+		glDisable(GL_LIGHTING);     // need to disable lighting for proper text color
+		glDisable(GL_DEPTH_TEST);
+
+			glColor4fv(color);          // set text color
+			//glRasterPos2i(x, y);        // place text position
+			glPushMatrix();
+				glTranslatef(x, y, 0);
+				glScalef(0.15f, 0.15f, 0.15f);
+				glLineWidth(2.f);
+
+				// loop all characters in the string
+				while(*str)
+				{
+					//glutBitmapCharacter(font, *str);
+					glutStrokeCharacter(font, *str);
+					++str;
+				}
+			glPopMatrix();
+
+		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_LIGHTING);
+    glPopAttrib();
 }
