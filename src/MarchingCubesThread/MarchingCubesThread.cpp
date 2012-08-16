@@ -42,20 +42,10 @@ void MarchingCubesThread::readFilesFromStandardInput(int argc, char **argv)
 
 void MarchingCubesThread::generateTriangles()
 {
-	this->vertexes.clear();
 	this->triangles.clear();
-
 	this->triangles = MarchingCubesDataset(this->dataset->getMaxVal() * this->min_value_scale, *(this->dataset), LinearInterp, this->num_triangles);
 
-	std::cout << "Number of Triangles = " << this->num_triangles << std::endl;
-	std::cout << "this->dataset->getMaxVal() = " << this->dataset->getMaxVal() << std::endl;
-	std::cout << "this->min_value_scale = " << this->min_value_scale << std::endl;
-	std::cout << "this->dataset->getMaxVal() * this->min_value_scale = " << this->dataset->getMaxVal() * this->min_value_scale << std::endl;
-
-//	std::cout << this->triangles[0].p[0].x << std::endl;
-//	std::cout << this->triangles[0].p[0].y << std::endl;
-//	std::cout << this->triangles[0].p[0].z << std::endl;
-
+	this->vertexes.clear();
 	for(unsigned int i=0; i < this->num_triangles; i++)
 	{
 		for(int j=2; j >= 0; j--)
