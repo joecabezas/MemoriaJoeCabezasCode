@@ -232,7 +232,9 @@ void Visualizer::processInputEvents(const float elapsed_time)
 	if(Input.IsKeyDown(sf::Key::O))
 	{
 		std::cout << "Generating Off file" << std::endl;
-		this->mc_thread->createOffFile();
+		std::stringstream ss;
+		ss << "off_file_" << this->min_value*100 << ".off";
+		this->mc_thread->createOffFile(ss.str());
 	}
 
 	//take screenshot

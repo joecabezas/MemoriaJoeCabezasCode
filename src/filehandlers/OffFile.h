@@ -14,7 +14,7 @@
 
 class OffFile {
 public:
-	OffFile(vector_triangles, std::size_t);
+	OffFile(vector_triangles, std::size_t, std::string);
 	virtual ~OffFile();
 
 	void createOff();
@@ -33,6 +33,7 @@ private:
 	std::size_t num_faces;
 	std::size_t num_edges;
 
+	std::string file_name;
 	std::ofstream* file;
 };
 

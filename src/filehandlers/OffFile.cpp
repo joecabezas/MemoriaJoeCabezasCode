@@ -9,10 +9,11 @@
 
 #define length(x) (sizeof(x)/sizeof(x[0]))
 
-OffFile::OffFile(vector_triangles t, std::size_t num_triangles)
+OffFile::OffFile(vector_triangles t, std::size_t num_triangles, std::string file_name)
 {
 	this->triangles = t;
 	this->num_triangles = num_triangles;
+	this->file_name = file_name;
 
 	this->setup();
 }
@@ -29,13 +30,15 @@ void OffFile::setup()
 
 void OffFile::createOff()
 {
-	this->file->open("out.off");
+	this->file->open(this->file_name.c_str());
 
 	this->createHeader();
 	this->createVertices();
 	this->createFaces();
 
 	this->file->close();
+
+	std::cout << "done: " << this->file_name << std::endl;
 }
 
 void OffFile::createHeader()

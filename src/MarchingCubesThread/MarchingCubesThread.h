@@ -21,7 +21,7 @@ class MarchingCubesThread : public sf::Thread
 		virtual ~MarchingCubesThread();
 
 		void readFilesFromStandardInput(int argc, char **argv);
-		void createOffFile();
+		void createOffFile(std::string);
 
 		std::vector< GLfloat >* getVertexPointer();
 

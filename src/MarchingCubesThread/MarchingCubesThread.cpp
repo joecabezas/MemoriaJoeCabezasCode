@@ -74,9 +74,9 @@ void MarchingCubesThread::generateTriangles()
 	}
 }
 
-void MarchingCubesThread::createOffFile()
+void MarchingCubesThread::createOffFile(std::string file_name)
 {
-	OffFile* f = new OffFile(this->triangles, this->num_triangles);
+	OffFile* f = new OffFile(this->triangles, this->num_triangles, file_name);
 	f->createOff();
 }
 
