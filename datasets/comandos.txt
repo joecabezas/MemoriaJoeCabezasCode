@@ -8,3 +8,6 @@ Como convertir archivos RAW a un set de imagenes TIF
 Como convertir un archivo RAW en un set de imagenes PGM
 	convert -size 256x256x256 -depth 8 gray:skull.raw ../pgm/out%05d.pgm
 
+Crear un montaje (mosaico)
+	padding 10px (x e y), dispocision 4x7 imagenes (28 archivos)
+		montage -geometry +10+10 -tile 4x7 *.pgm out.png
