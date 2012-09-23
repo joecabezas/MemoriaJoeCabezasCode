@@ -1,0 +1,8 @@
+To compile:
+
+	cd bin
+	make all
+
+Excecution (using images from ../datasets/marschnerlobb/pgm/ as input)
+
+	./MemoriaJoeCabezasCode $(ls -1 ../datasets/marschnerlobb/pgm/*)
