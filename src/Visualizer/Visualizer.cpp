@@ -141,7 +141,7 @@ void Visualizer::loop()
 		glLoadIdentity();
 		gluPerspective(
 			60.f,
-			float(sf::VideoMode::GetMode(0).Width)/float(sf::VideoMode::GetMode(0).Height),
+			float(this->res_x)/float(this->res_y),
 			0.1f, -500.f
 		);
 		//set camera
