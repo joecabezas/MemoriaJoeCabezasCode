@@ -661,12 +661,12 @@ void Visualizer::showInfo()
 		std::stringstream ss;
 		//ss << std::fixed << std::setprecision(3);
 
-		ss << "Min value (isosurface): " << this->min_value*100 << "%" << std::ends;
-		this->draw2dString(ss.str().c_str(), this->res_x*0.005, this->res_y*0.95, color, GLUT_STROKE_ROMAN);
+		ss << "Selected isovalue: " << this->min_value*100 << "%" << std::ends;
+		this->draw2dString(ss.str().c_str(), 7, 25, color, GLUT_STROKE_ROMAN);
 		ss.str("");
 
 		ss << "Triangles: " << this->vertexes->size() / 18 << std::ends;
-		this->draw2dString(ss.str().c_str(), this->res_x*0.005, this->res_y*0.895, color, GLUT_STROKE_ROMAN);
+		this->draw2dString(ss.str().c_str(), 7, 52, color, GLUT_STROKE_ROMAN);
 		ss.str("");
 
 		// unset floating format
@@ -693,17 +693,19 @@ void Visualizer::draw2dString(const char *str, int x, int y, float color[4], voi
 			glColor4fv(color);          // set text color
 			//glRasterPos2i(x, y);        // place text position
 			glPushMatrix();
-				glTranslatef(x, y, 0);
-				glScalef(0.15f, 0.15f, 0.15f);
+				glTranslatef(x, this->res_y - y, 0);
+				//glRasterPos2f(0, 0);
+				glScalef(0.17f, 0.17f, 0.17f);
 				glLineWidth(2.f);
 
 				// loop all characters in the string
 				while(*str)
 				{
-					//glutBitmapCharacter(font, *str);
+					//glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *str);
 					glutStrokeCharacter(font, *str);
 					++str;
 				}
+
 			glPopMatrix();
 
 		glEnable(GL_DEPTH_TEST);
