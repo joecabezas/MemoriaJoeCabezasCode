@@ -221,7 +221,7 @@ void Visualizer::processInputEvents(const float elapsed_time)
 
 
 	//clear vertices vector
-	if(Input.IsKeyDown(sf::Key::N))
+	if(Input.IsKeyDown(sf::Key::Back))
 	{
 		std::cout << "A: this->vertexes->size() = " << this->vertexes->size() << std::endl;
 		this->vertexes->clear();
