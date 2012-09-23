@@ -64,7 +64,7 @@ void Visualizer::setup()
 	this->video_mode = new sf::VideoMode(this->res_x, this->res_y, 32);
 
 	//title
-	this->window_title = "OpenGL xbox cam [Joe]";
+	this->window_title = "Marching Cubes Visualizer [Joe Cabezas Campos]";
 
 	//style
 	this->window_style =
