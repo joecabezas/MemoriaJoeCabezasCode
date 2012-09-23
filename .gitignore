@@ -3,8 +3,8 @@
 .cproject
 .project
 
-Debug/
-Release/
+#datasets
+datasets/
 
 #outputs
 *.off
