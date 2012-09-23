@@ -36,7 +36,7 @@ int main(int argc, char **argv)
 	glutInit(&argc, argv);
 
 	//create the visualizer
-	Visualizer visualizer(0.7f, 0.7f);
+	Visualizer visualizer(0.5f, 0.5f);
 
 
 	//create the thread that calculates the marching cubes

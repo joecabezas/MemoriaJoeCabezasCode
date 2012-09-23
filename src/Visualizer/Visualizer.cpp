@@ -15,6 +15,8 @@ Visualizer::Visualizer(
 	this->res_x = sf::VideoMode::GetMode(0).Width * percentual_width;
 	this->res_y = sf::VideoMode::GetMode(0).Height * percentual_height;
 
+	this->res_y = this->res_x;
+
 	this->setup();
 }
 
@@ -124,13 +126,13 @@ void Visualizer::loop()
 		glLoadIdentity();
 
 		//draw 3d Scene
-		this->draw3dScene();
+		//this->draw3dScene();
 
 		//draw 3d model
 		this->draw3dModel();
 
 		//draw Hud (User Interface)
-		this->showInfo();
+		//this->showInfo();
 
 //		glPushMatrix();
 //			glTranslatef(5,5,5);
@@ -376,7 +378,7 @@ void Visualizer::setupOpenGL()
 
 	// Set color and depth clear value
 	glClearDepth(1.f);
-	glClearColor(0.f, 0.f, 0.f, 0.f);
+	glClearColor(1.f, 1.f, 1.f, 0.f);
 
 	//Set material properties which will be assigned by glColor
 //	GLfloat mat_ambient_cubo[] = {0.5, 0.5, 0.5, 0.5f};
@@ -394,12 +396,12 @@ void Visualizer::setupOpenGL()
 	glEnable(GL_LIGHT1);
 
 	// Create light components
-	GLfloat ambientLight0[] = { 0.25f, 0.25f, 0.25f, 1.0f };
+	GLfloat ambientLight0[] = {0.1f, 0.1f, 0.1f, 1.0f };
 	GLfloat diffuseLight0[] = { 0.5f, 0.5f, 0.5f, 1.0f };
 	GLfloat specularLight0[] = { 0.9f, 0.9f, 0.9f, 1.0f };
 	GLfloat position0[] = { 0.0f, 1.0f, 0.0f, 0.0f };
 
-	GLfloat ambientLight1[] = { 0.05f, 0.05f, 0.05f, 1.0f };
+	GLfloat ambientLight1[] = {0.15f, 0.15f, 0.15f, 1.0f };
 	GLfloat diffuseLight1[] = { 0.2f, 0.2f, 0.2f, 1.0f };
 	GLfloat specularLight1[] = { 0.5f, 0.5f, 0.5f, 1.0f };
 	GLfloat position1[] = { 0.0f, -1.0f, 0.0f, 0.0f };
